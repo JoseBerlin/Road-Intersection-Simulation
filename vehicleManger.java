@@ -8,7 +8,7 @@ public class vehicleManger {
     Stack<String[]> vehicles = new Stack<String[]>();
 
 
-
+    //Reading vehicle csv file and adding it to stack
     public void vehicle() {
         String veh = "";
         int i = 0;
@@ -30,6 +30,7 @@ public class vehicleManger {
         }
     }
 
+    //Reading intersection csv file and adding it to stack
     public void intersection() {
         String inter = "";
         int i = 0;
