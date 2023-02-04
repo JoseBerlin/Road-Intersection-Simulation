@@ -1,14 +1,16 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Stack;
 
 public class vehicleManger {
+    Stack<String[]> intersection = new Stack<String[]>();
+    Stack<String[]> vehicles = new Stack<String[]>();
+
+
 
     public void vehicle() {
         String veh = "";
-        Stack<String[]> vehicles = new Stack<String[]>();
         int i = 0;
         try {
             BufferedReader bfr = new BufferedReader(new FileReader("Vehicles.csv"));
@@ -30,7 +32,6 @@ public class vehicleManger {
 
     public void intersection() {
         String inter = "";
-        Stack<String[]> intersection = new Stack<String[]>();
         int i = 0;
         try {
             BufferedReader bfr = new BufferedReader(new FileReader("Intersection.csv"));
