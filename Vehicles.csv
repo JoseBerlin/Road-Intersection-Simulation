@@ -1,13 +1,13 @@
 Type,Plate_no,In_segment,Crossing_time,Direction,Vehicle_crossed,Length,CO2_emission
-Car,1000001,N,3 s,Left,FALSE,3.4 m,5 gm
-Car,1000002,E,3 s,Right,FALSE,3.6 m,10 gm
-Car,1000003,S,3 s,Straight,FALSE,4.4 m,5 gm
-Car,1000004,W,3 s,Left,FALSE,4.0 m,5 gm
-Truck,1000006,N,5 s,Straight,FALSE,5.3 m,10 gm
-Truck,1000007,S,5 s,Left,FALSE,5.4 m,10 gm
-Truck,1000008,W,5 s,Right,FALSE,5.6 m,10 gm
-Truck,1000010,E,5 s,Left,FALSE,5.5 m,10 gm
-Bus,1000011,S,4 s,Right,FALSE,12 m,10 gm
-Bus,1000012,W,4 s,Straight,FALSE,13 m,10 gm
-Bus,1000014,E,4 s,Right,FALSE,13 m,10 gm
-Bus,1000015,N,4 s,Straight,FALSE,12 m,10 gm
+Car,1000001,N,3,Left,FALSE,3.4 m,5 gm
+Car,1000002,E,3,Right,FALSE,3.6 m,10 gm
+Car,1000003,S,3,Straight,FALSE,4.4 m,5 gm
+Car,1000004,W,3,Left,FALSE,4.0 m,5 gm
+Truck,1000006,N,5,Straight,FALSE,5.3 m,10 gm
+Truck,1000007,S,5,Left,FALSE,5.4 m,10 gm
+Truck,1000008,W,5,Right,FALSE,5.6 m,10 gm
+Truck,1000010,E,5,Left,FALSE,5.5 m,10 gm
+Bus,1000011,S,4,Right,FALSE,12 m,10 gm
+Bus,1000012,W,4,Straight,FALSE,13 m,10 gm
+Bus,1000014,E,4,Right,FALSE,13 m,10 gm
+Bus,1000015,N,4,Straight,FALSE,12 m,10 gm
