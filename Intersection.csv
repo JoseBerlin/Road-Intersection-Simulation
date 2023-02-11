@@ -1,9 +1,9 @@
 Phases,Duration,Segment_in,Direction1,Direction2
-1,60,S,Left,Null
-2,30,N,Straight,Right
-3,50,W,Left,Null
-4,60,E,Straight,Right
-5,10,N,Left,Null
-6,10,S,Straight,Right
-7,10,E,Left,Null
-8,10,W,Straight,Right
+1,60,S,W,Null
+2,30,N,S,W
+3,50,W,N,Null
+4,60,E,W,N
+5,10,N,E,Null
+6,10,S,N,E
+7,10,E,S,Null
+8,10,W,E,S
