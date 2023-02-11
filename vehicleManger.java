@@ -5,10 +5,12 @@ import java.util.Stack;
 
 public class vehicleManger {
     Stack<String[]> intersection = new Stack<String[]>();
-    Stack<String[]> vehicles = new Stack<String[]>();
+    Stack<String[]> vehicleEast = new Stack<String[]>();
+    Stack<String[]> vehicleWest = new Stack<String[]>();
+    Stack<String[]> vehicleNorth = new Stack<String[]>();
+    Stack<String[]> vehicleSouth = new Stack<String[]>();
 
-
-    //Reading vehicle csv file and adding it to stack
+    // Reading vehicle csv file and adding it to stack
     public void vehicle() {
         String veh = "";
         int i = 0;
@@ -21,16 +23,26 @@ public class vehicleManger {
 
                 }
                 String[] temp = veh.split(",");
+                if (temp[2] == "E") {
 
-                vehicles.push(temp);
+                    vehicleEast.push(temp);
+                } else if (temp[2] == "W") {
 
+                    vehicleWest.push(temp);
+                } else if (temp[2] == "N") {
+
+                    vehicleNorth.push(temp);
+                } else if (temp[2] == "S") {
+
+                    vehicleSouth.push(temp);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    //Reading intersection csv file and adding it to stack
+    // Reading intersection csv file and adding it to stack
     public void intersection() {
         String inter = "";
         int i = 0;
