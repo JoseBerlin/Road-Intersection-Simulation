@@ -1,4 +1,4 @@
-Type,Plate_no,In_segment,Crossing_time,Direction,Vehicle_crossed,Length,CO2_emission
+Type,Plate_no,In_segment,Crossing_time,Direction_to,Vehicle_crossed,Length,CO2_emission
 Car,1000001,N,3,S,FALSE,3.4 m,5 gm
 Car,1000002,E,3,W,FALSE,3.6 m,10 gm
 Car,1000003,S,3,N,FALSE,4.4 m,5 gm
