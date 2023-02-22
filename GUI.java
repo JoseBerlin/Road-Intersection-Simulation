@@ -16,7 +16,8 @@ public class GUI {
     private JTable veh_tbl, ps_tbl, stat_tbl, add_veh_tbl;
     private JButton add, cancel, exit;
 
-    public GUI(Scanner intersection, Scanner vehicles) {
+    vehicleManger mg=new vehicleManger();
+    public void Invoke() {
         mainframe = new JFrame();
         mainpanel = new JPanel();
         mainframe.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); // program to be exited if window is closed
@@ -73,8 +74,8 @@ public class GUI {
         stat_title.setFont(new Font("Arial", Font.BOLD, 16));
         JPanel add_ttl_panel = new JPanel();
         add_ttl_panel.add(add_title);
-        String[] add_tbl_head = { "Vehicle", "Type", "Crossing time", "Direction", "Length", "Emission" };
-        Object[][] add_data = { { "V", "T", "C", "D", "L", "E" } };
+        String[] add_tbl_head = { "Type", "No.", "Segment", "Crossing_time", "Direction", "Length","Co2" };
+        Object[][] add_data = { { "V", "T", "C", "D", "L", "E","Q" } };
         add_veh_tbl = new JTable(add_data, add_tbl_head);
         JScrollPane add_veh_scroll = new JScrollPane(add_veh_tbl);
         add_veh_scroll.setPreferredSize(new Dimension(400, 300));
@@ -123,6 +124,30 @@ public class GUI {
         mainframe.add(buttons_panel, BorderLayout.SOUTH);
 
         mainframe.add(new JScrollPane(mainpanel));
+
+        // Adding vehicles from gui
+        add.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String table_data_0 = GetData(add_veh_tbl, 0, 0);
+                String table_data_1 = GetData(add_veh_tbl, 0, 1);
+                String table_data_2 = GetData(add_veh_tbl, 0, 2);
+                String table_data_3 = GetData(add_veh_tbl, 0, 3);
+                String table_data_4 = GetData(add_veh_tbl, 0, 4);
+                String table_data_5 = GetData(add_veh_tbl, 0, 5);
+                String table_data_6 = GetData(add_veh_tbl, 0, 6);
+
+                mg.add_Vehicle_gui(table_data_0, Integer.parseInt(table_data_1), table_data_2.charAt(0),Double.parseDouble(table_data_3), table_data_4.charAt(0), Double.parseDouble(table_data_5),Double.parseDouble(table_data_6));
+
+                
+
+            }
+
+            // Function that returns data from specified position
+            private String GetData(JTable add_veh_tbl, int i, int j) {
+                return String.valueOf(add_veh_tbl.getModel().getValueAt(i, j));
+            }
+        });
+
         mainframe.setVisible(true);
     }
 }

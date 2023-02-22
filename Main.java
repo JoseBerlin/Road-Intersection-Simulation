@@ -13,7 +13,8 @@ public class Main {
             System.exit(0);
         }
 
-        GUI gui = new GUI(Intersection, Vehicles);
+        GUI gui = new GUI();
+        gui.Invoke();
         vehicleManger vh = new vehicleManger();
         vh.vehicle();
         vh.intersection();
