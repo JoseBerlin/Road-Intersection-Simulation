@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
+import java.util.*;
 
 public class vehicleManger {
     Stack<String[]> intersection = new Stack<String[]>();
@@ -24,9 +25,12 @@ public class vehicleManger {
                     continue;
 
                 }
+
                 String[] temp = veh.split(",");
-                Vehicle vhi=new Vehicle(temp[0], Integer.parseInt(temp[1]), temp[2].charAt(0), Double.parseDouble(temp[3]), temp[4].charAt(0), Boolean.parseBoolean(temp[5]), Double.parseDouble(temp[6]), Double.parseDouble(temp[7]));
-                if (temp[2] == "E") {
+                Vehicle vhi = new Vehicle(temp[0], Integer.parseInt(temp[1]), temp[2].charAt(0),
+                        Double.parseDouble(temp[3]), temp[4].charAt(0), Boolean.parseBoolean(temp[5]),
+                        Double.parseDouble(temp[6]), Double.parseDouble(temp[7]));
+                if (temp[2].equals("E")) {
 
                     vehicleEast.add(vhi);
                 } else if (temp[2] == "W") {
@@ -40,13 +44,16 @@ public class vehicleManger {
                     vehicleSouth.add(vhi);
                 }
             }
+            bfr.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    //Intializing and adding vehcile class from the data obtained from gui
-    public void add_Vehicle_gui(String typ,int num,char in_s,double cross_time,char direct_to,double leng,double co2){
-        Vehicle fc=new Vehicle(typ, num, in_s, cross_time, direct_to, false, leng, co2);
+
+    // Intializing and adding vehcile class from the data obtained from gui
+    public void add_Vehicle_gui(String typ, int num, char in_s, double cross_time, char direct_to, double leng,
+            double co2) {
+        Vehicle fc = new Vehicle(typ, num, in_s, cross_time, direct_to, false, leng, co2);
         if (in_s == 'E') {
             vehicleEast.add(fc);
         } else if (in_s == 'W') {
@@ -71,16 +78,23 @@ public class vehicleManger {
                 if (i == 0) {
                     i++;
                     continue;
-
                 }
                 String[] temp = inter.split(",");
-                System.out.println(temp[1]);
                 intersection.push(temp);
-
             }
+            bfr.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        // String[][] arr = new String[intersection.size()][];
+        // intersection.toArray(arr);
+        // for (int k = 0; k < arr.length; k++) {
+        // for (int j = 0; j < arr[k].length; j++) {
+        // System.out.print(arr[k][j] + " ");
+        // }
+        // System.out.println();
+        // }
     }
 
 }

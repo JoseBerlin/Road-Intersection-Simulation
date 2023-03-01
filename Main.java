@@ -12,12 +12,11 @@ public class Main {
             System.out.println(e.toString());
             System.exit(0);
         }
-
-        GUI gui = new GUI();
-        gui.Invoke();
         vehicleManger vh = new vehicleManger();
         vh.vehicle();
         vh.intersection();
+        GUI gui = new GUI();
+        gui.Invoke();
 
     }
 }
