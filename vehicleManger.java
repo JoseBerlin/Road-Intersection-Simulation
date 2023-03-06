@@ -53,9 +53,11 @@ public class vehicleManger {
     // Initializing and adding vehicle class from the data obtained from gui
     public void add_Vehicle_gui(String typ, int num, char in_s, double cross_time, char direct_to, double leng,
             double co2) {
+        vehicleManger vh = new vehicleManger();
         Vehicle fc = new Vehicle(typ, num, in_s, cross_time, direct_to, false, leng, co2);
         if (in_s == 'E') {
             vehicleEast.add(fc);
+
         } else if (in_s == 'W') {
 
             vehicleWest.add(fc);
@@ -66,6 +68,7 @@ public class vehicleManger {
 
             vehicleSouth.add(fc);
         }
+
     }
 
     // Reading intersection csv file and adding it to stack
@@ -80,7 +83,8 @@ public class vehicleManger {
                     continue;
                 }
                 String[] temp = inter.split(",");
-                Intersection intersection1 = new Intersection(Integer.parseInt(temp[0]), Integer.parseInt(temp[1]), temp[2].charAt(0),
+                Intersection intersection1 = new Intersection(Integer.parseInt(temp[0]), Integer.parseInt(temp[1]),
+                        temp[2].charAt(0),
                         temp[3].charAt(0), temp[4].charAt(0));
                 intersection.push(intersection1);
             }

@@ -16,7 +16,7 @@ public class Main {
         vh.vehicle();
         vh.intersection();
         GUI gui = new GUI();
-        gui.Invoke(vh);
+        gui.invoke(vh);
 
     }
 }
