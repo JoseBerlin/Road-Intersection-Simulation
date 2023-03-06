@@ -7,7 +7,7 @@ import java.util.Stack;
 import java.util.*;
 
 public class vehicleManger {
-    Stack<String[]> intersection = new Stack<String[]>();
+    Stack<Intersection> intersection = new Stack<>();
     Queue<Vehicle> vehicleEast = new LinkedList<>();
     Queue<Vehicle> vehicleWest = new LinkedList<>();
     Queue<Vehicle> vehicleNorth = new LinkedList<>();
@@ -33,13 +33,13 @@ public class vehicleManger {
                 if (temp[2].equals("E")) {
 
                     vehicleEast.add(vhi);
-                } else if (temp[2] == "W") {
+                } else if (temp[2].equals("W")) {
 
                     vehicleWest.add(vhi);
-                } else if (temp[2] == "N") {
+                } else if (temp[2].equals("N")) {
 
                     vehicleNorth.add(vhi);
-                } else if (temp[2] == "S") {
+                } else if (temp[2].equals("S")) {
 
                     vehicleSouth.add(vhi);
                 }
@@ -50,7 +50,7 @@ public class vehicleManger {
         }
     }
 
-    // Intializing and adding vehcile class from the data obtained from gui
+    // Initializing and adding vehicle class from the data obtained from gui
     public void add_Vehicle_gui(String typ, int num, char in_s, double cross_time, char direct_to, double leng,
             double co2) {
         Vehicle fc = new Vehicle(typ, num, in_s, cross_time, direct_to, false, leng, co2);
@@ -80,7 +80,9 @@ public class vehicleManger {
                     continue;
                 }
                 String[] temp = inter.split(",");
-                intersection.push(temp);
+                Intersection intersection1 = new Intersection(Integer.parseInt(temp[0]), Integer.parseInt(temp[1]), temp[2].charAt(0),
+                        temp[3].charAt(0), temp[4].charAt(0));
+                intersection.push(intersection1);
             }
             bfr.close();
         } catch (IOException e) {

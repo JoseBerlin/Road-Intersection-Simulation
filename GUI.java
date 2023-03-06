@@ -1,7 +1,6 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
+import java.util.*;
+import java.util.Queue;
 import javax.swing.*; //used for user interface
 import javax.swing.text.SimpleAttributeSet; //used for changing fonts
 import javax.swing.text.StyleConstants; //text styles
@@ -17,9 +16,10 @@ public class GUI {
     private JTable veh_tbl, ps_tbl, stat_tbl, add_veh_tbl;
     private JButton add, cancel, exit, add_pedestrian;
 
-    vehicleManger mg = new vehicleManger();
+    vehicleManger mg;
 
-    public void Invoke() {
+    public void Invoke(vehicleManger vehicle) {
+        mg = vehicle;
         mainframe = new JFrame();
         mainpanel = new JPanel();
         mainframe.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); // program to be exited if window is closed
@@ -31,7 +31,8 @@ public class GUI {
         // Creating Tables
         String[] veh_tbl_head = { "Type", "no", "segment", "Cross time", "Direction", "Status", "Length" };
         Object[][] veh_data = { { "h", "a", "l", "l", "o", "o", "a" }, { "n", "a", "l", "l", "o", "o", "o" } };
-        veh_tbl = new JTable(veh_data, veh_tbl_head);
+        Object[][] abc = getVehicleData();
+        veh_tbl = new JTable(abc, veh_tbl_head);
         veh_tbl.getTableHeader().setReorderingAllowed(false); // setting coumn reordering order as false
         veh_tbl.setAutoCreateRowSorter(true); // setting row sorting order as true for the table
         veh_tbl.setEnabled(false); // Setting the table's data non editable
@@ -48,7 +49,7 @@ public class GUI {
 
         // 2.Phases table
         String[] ps_tbl_head = { "Phase", "Duration" };
-        Object[][] ps_data = { { "h", "w" }, { "h", "e" } };
+        Object[][] ps_data = getPhaseData();
         ps_tbl = new JTable(ps_data, ps_tbl_head);
         ps_tbl.getTableHeader().setReorderingAllowed(false);
         ps_tbl.setAutoCreateRowSorter(true);
@@ -73,7 +74,7 @@ public class GUI {
                 BorderFactory.createEtchedBorder(), "Statistics", TitledBorder.CENTER,
                 TitledBorder.CENTER));
 
-        // Co2 label & Textboxes
+        // Co2 label & Text boxes
         JLabel co2 = new JLabel("CO2 Emission : ");
         co2.setFont(new Font("Arial", Font.BOLD, 16));
         JLabel kg = new JLabel("kg");
@@ -108,7 +109,7 @@ public class GUI {
         exit = new JButton("Exit");
         add_pedestrian = new JButton("Add Pedestrians");
 
-        // Seperate panel for Buttons
+        // Separate panel for Buttons
         JPanel South_panel = new JPanel(new FlowLayout());
         South_panel.setPreferredSize(new Dimension(5000, 50));
 
@@ -146,5 +147,37 @@ public class GUI {
         });
 
         mainframe.setVisible(true);
+
     }
+    public Object[][] getVehicleData(){
+        Collection<Vehicle> vehicleList = mg.vehicleWest;
+        vehicleList.addAll(mg.vehicleEast);
+        vehicleList.addAll(mg.vehicleNorth);
+       vehicleList.addAll(mg.vehicleSouth);
+        Object[][] abc = vehicleList
+                .stream()
+                .map(vh -> new String[] {vh.getType(),
+                        String.valueOf(vh.getPlate_no()),
+                        String.valueOf(vh.getIn_segment()),
+                        String.valueOf(vh.getCrossing_time()),
+                        String.valueOf(vh.getDirection_to()),
+                        String.valueOf(vh.isCrossed()),
+                        String.valueOf(vh.getLength())})
+                .toArray(String[][]::new);
+        return abc;
+    }
+
+    public Object[][] getPhaseData(){
+        Collection<Intersection> intersection = mg.intersection;
+        Object[][] abc = intersection
+                .stream()
+                .map(inter -> new String[]{String.valueOf(inter.getPhases()),
+                        String.valueOf(inter.getDuration())})
+                .toArray(String[][]::new);
+        return abc;
+    }
+
+//    public Object[][] getStatisticData(){
+//
+//    }
 }
