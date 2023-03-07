@@ -3,7 +3,8 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws noSegmentException {
+        
         Scanner Vehicles = null, Intersection = null;
         try {
             Intersection = new Scanner(new File("Intersection.csv"));

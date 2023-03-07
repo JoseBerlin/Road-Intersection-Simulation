@@ -1,9 +1,6 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Stack;
 import java.util.*;
 
 public class vehicleManger {
@@ -13,8 +10,10 @@ public class vehicleManger {
     Queue<Vehicle> vehicleNorth = new LinkedList<>();
     Queue<Vehicle> vehicleSouth = new LinkedList<>();
 
+    Double crossingTime, waitintTime, waitingLength;
+
     // Reading vehicle csv file and adding it to stack
-    public void vehicle() {
+    public void vehicle() throws noSegmentException {
         String veh = "";
         int i = 0;
         try {
@@ -27,21 +26,27 @@ public class vehicleManger {
                 }
 
                 String[] temp = veh.split(",");
-                Vehicle vhi = new Vehicle(temp[0], Integer.parseInt(temp[1]), temp[2].charAt(0),
-                        Double.parseDouble(temp[3]), temp[4].charAt(0), Boolean.parseBoolean(temp[5]),
-                        Double.parseDouble(temp[6]), Double.parseDouble(temp[7]));
-                if (temp[2].equals("E")) {
+                if (temp[2].charAt(0) == 'E' || temp[2].charAt(0) == 'W' || temp[2].charAt(0) == 'N'
+                        || temp[2].charAt(0) == 'S') {
+                    Vehicle vhi = new Vehicle(temp[0], Integer.parseInt(temp[1]), temp[2].charAt(0),
+                            Double.parseDouble(temp[3]), temp[4].charAt(0), Boolean.parseBoolean(temp[5]),
+                            Double.parseDouble(temp[6]), Double.parseDouble(temp[7]));
+                    if (temp[2].equals("E")) {
 
-                    vehicleEast.add(vhi);
-                } else if (temp[2].equals("W")) {
+                        vehicleEast.add(vhi);
+                    } else if (temp[2].equals("W")) {
 
-                    vehicleWest.add(vhi);
-                } else if (temp[2].equals("N")) {
+                        vehicleWest.add(vhi);
+                    } else if (temp[2].equals("N")) {
 
-                    vehicleNorth.add(vhi);
-                } else if (temp[2].equals("S")) {
+                        vehicleNorth.add(vhi);
+                    } else if (temp[2].equals("S")) {
 
-                    vehicleSouth.add(vhi);
+                        vehicleSouth.add(vhi);
+                    }
+                } else {
+                    throw new noSegmentException(
+                            temp[2].charAt(0) + " segment doesnt Exist. Only W,N,E,S segments exsits.");
                 }
             }
             bfr.close();
@@ -52,21 +57,25 @@ public class vehicleManger {
 
     // Initializing and adding vehicle class from the data obtained from gui
     public void add_Vehicle_gui(String typ, int num, char in_s, double cross_time, char direct_to, double leng,
-            double co2) {
-        vehicleManger vh = new vehicleManger();
-        Vehicle fc = new Vehicle(typ, num, in_s, cross_time, direct_to, false, leng, co2);
-        if (in_s == 'E') {
-            vehicleEast.add(fc);
+            double co2) throws noSegmentException {
 
-        } else if (in_s == 'W') {
+        if (in_s == 'E' || in_s == 'W' || in_s == 'N' || in_s == 'S') {
+            Vehicle fc = new Vehicle(typ, num, in_s, cross_time, direct_to, false, leng, co2);
 
-            vehicleWest.add(fc);
-        } else if (in_s == 'N') {
+            if (in_s == 'E') {
+                vehicleEast.add(fc);
+            } else if (in_s == 'W') {
 
-            vehicleNorth.add(fc);
-        } else if (in_s == 'S') {
+                vehicleWest.add(fc);
+            } else if (in_s == 'N') {
 
-            vehicleSouth.add(fc);
+                vehicleNorth.add(fc);
+            } else if (in_s == 'S') {
+
+                vehicleSouth.add(fc);
+            }
+        } else {
+            throw new noSegmentException(in_s + " segment doesnt Exist. Only W, N, E, S segments exsits.");
         }
 
     }
@@ -101,6 +110,63 @@ public class vehicleManger {
         // }
         // System.out.println();
         // }
+    }
+
+    // initializing the values to nill
+    public void segNill() {
+        crossingTime = 0.0;
+        waitingLength = 0.0;
+        waitintTime = 0.0;
+    }
+
+    // calcuations for segment table
+    public HashMap<Character, Double[]> calSegment() {
+        HashMap<Character, Double[]> segstat = new HashMap<Character, Double[]>();
+        segNill();
+        for (Vehicle vh : vehicleEast) {
+            crossingTime += vh.getCrossing_time();
+            waitingLength += vh.getLength();
+            waitintTime += vh.getCo2_emission();
+
+        }
+        Double[] ddb = new Double[] { crossingTime, waitingLength, waitintTime };
+        segstat.put('E', ddb);
+
+        segNill();
+
+        for (Vehicle vh : vehicleWest) {
+            crossingTime += vh.getCrossing_time();
+            waitingLength += vh.getLength();
+            waitintTime += vh.getCo2_emission();
+
+        }
+        ddb = new Double[] { crossingTime, waitingLength, waitintTime };
+        segstat.put('W', ddb);
+
+        segNill();
+
+        for (Vehicle vh : vehicleNorth) {
+            crossingTime += vh.getCrossing_time();
+            waitingLength += vh.getLength();
+            waitintTime += vh.getCo2_emission();
+
+        }
+        ddb = new Double[] { crossingTime, waitingLength, waitintTime };
+        segstat.put('N', ddb);
+
+        segNill();
+
+        for (Vehicle vh : vehicleSouth) {
+            crossingTime += vh.getCrossing_time();
+            waitingLength += vh.getLength();
+            waitintTime += vh.getCo2_emission();
+
+        }
+        ddb = new Double[] { crossingTime, waitingLength, waitintTime };
+        segstat.put('S', ddb);
+
+        return segstat;
+
     }
 
 }

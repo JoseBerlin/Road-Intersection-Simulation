@@ -15,7 +15,7 @@ import java.awt.event.ActionEvent; //handles button press events
 public class GUI {
         JFrame mainframe;
         JPanel mainpanel;
-        private DefaultTableModel tableModel;
+        private DefaultTableModel tableModel, statModel;
         private JTable veh_tbl, ps_tbl, stat_tbl, add_veh_tbl;
         private JButton add, cancel, exit, add_pedestrian;
         Collection<Vehicle> vehicleList;
@@ -73,8 +73,11 @@ public class GUI {
 
                 // 3.Statistics table
                 String[] stat_tbl_head = { "Segment", "Waiting time", "Waiting Length", "Cross time" };
-                Object[][] stat_data = { { "S", "W", "WL", "C" } };
-                stat_tbl = new JTable(stat_data, stat_tbl_head);
+                statModel = new DefaultTableModel();
+                statModel.setColumnIdentifiers(stat_tbl_head);
+                stat_tbl = new JTable();
+                stat_tbl.setModel(statModel);
+                setStatData();
                 stat_tbl.getTableHeader().setReorderingAllowed(false);
                 stat_tbl.setEnabled(false);
                 stat_tbl.setAutoCreateRowSorter(true); // enables sorting
@@ -144,10 +147,16 @@ public class GUI {
                                 String table_data_5 = GetData(add_veh_tbl, 0, 5);
                                 String table_data_6 = GetData(add_veh_tbl, 0, 6);
 
-                                mg.add_Vehicle_gui(table_data_0, Integer.parseInt(table_data_1), table_data_2.charAt(0),
-                                                Double.parseDouble(table_data_3), table_data_4.charAt(0),
-                                                Double.parseDouble(table_data_5),
-                                                Double.parseDouble(table_data_6));
+                                try {
+                                        mg.add_Vehicle_gui(table_data_0, Integer.parseInt(table_data_1),
+                                                        table_data_2.charAt(0),
+                                                        Double.parseDouble(table_data_3), table_data_4.charAt(0),
+                                                        Double.parseDouble(table_data_5),
+                                                        Double.parseDouble(table_data_6));
+                                } catch (NumberFormatException | noSegmentException e1) {
+                                        // TODO Auto-generated catch block
+                                        e1.printStackTrace();
+                                }
 
                                 for (Vehicle fv : mg.vehicleWest) {
                                         System.out.println(fv.getPlate_no());
@@ -203,6 +212,21 @@ public class GUI {
                         tableModel.addRow(abc);
                 }
 
+        }
+
+         //testing of stat table
+
+    
+        // assigning statstical data in table
+        public void setStatData() {
+
+                Double[] fg = null;
+                HashMap<Character, Double[]> stat = mg.calSegment();
+                for (char i : stat.keySet()) {
+                        fg = stat.get(i);
+                        Object[] df = new Object[] { i, fg[0], fg[1], fg[2] };
+                        statModel.addRow(df);
+                }
         }
 
         public Object[][] getPhaseData() {
