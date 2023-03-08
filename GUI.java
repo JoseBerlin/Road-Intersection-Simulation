@@ -8,6 +8,7 @@ import javax.swing.text.StyledDocument; //text styles
 import java.awt.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 import java.awt.event.ActionListener; //listens for mouse clicks on buttons
 import java.awt.event.ActionEvent; //handles button press events
@@ -111,7 +112,14 @@ public class GUI {
                 // 4.Add vehicle table
                 String[] add_tbl_head = { "Type", "No.", "Segment", "Crossing_time", "Direction", "Length", "Co2" };
                 Object[][] add_data = { { "car", "23232", "E", "32.9", "N", "12.0", "32.0" } };
+                JComboBox optbox = new JComboBox<>();
+                optbox.addItem("car");
+                optbox.addItem("bike");
+                optbox.addItem("bus");
+                optbox.addItem("truck");
                 add_veh_tbl = new JTable(add_data, add_tbl_head);
+                TableColumn fcol=add_veh_tbl.getColumnModel().getColumn(0);
+                fcol.setCellEditor(new DefaultCellEditor(optbox));
                 JScrollPane add_veh_scroll = new JScrollPane(add_veh_tbl);
                 add_veh_scroll.setPreferredSize(new Dimension(700, 39));
                 JPanel Centre_panel = new JPanel();
@@ -134,6 +142,7 @@ public class GUI {
                 South_panel.add(add, BorderLayout.WEST);
                 South_panel.add(cancel, BorderLayout.CENTER);
                 South_panel.add(exit, BorderLayout.EAST);
+                South_panel.add(add_pedestrian, BorderLayout.EAST);
 
                 // Adding panels to mainframe
                 mainframe.add(North_panel, BorderLayout.NORTH);
@@ -142,16 +151,20 @@ public class GUI {
 
                 // Adding vehicles from gui
                 add.addActionListener(new ActionListener() {
+                        Scanner testtype = new Scanner(System.in);
+
                         public void actionPerformed(ActionEvent e) {
-                                String table_data_0 = GetData(add_veh_tbl, 0, 0);
-                                String table_data_1 = GetData(add_veh_tbl, 0, 1);
-                                String table_data_2 = GetData(add_veh_tbl, 0, 2);
-                                String table_data_3 = GetData(add_veh_tbl, 0, 3);
-                                String table_data_4 = GetData(add_veh_tbl, 0, 4);
-                                String table_data_5 = GetData(add_veh_tbl, 0, 5);
-                                String table_data_6 = GetData(add_veh_tbl, 0, 6);
 
                                 try {
+                                        String table_data_0 = GetData(add_veh_tbl, 0, 0);
+                                        String table_data_1 = GetData(add_veh_tbl, 0, 1);
+                                        String table_data_2 = GetData(add_veh_tbl, 0, 2);
+                                        String table_data_3 = GetData(add_veh_tbl, 0, 3);
+                                        String table_data_4 = GetData(add_veh_tbl, 0, 4);
+                                        String table_data_5 = GetData(add_veh_tbl, 0, 5);
+                                        String table_data_6 = GetData(add_veh_tbl, 0, 6);
+
+                                        table_data_0.getClass().equals(String.class);
                                         mg.add_Vehicle_gui(table_data_0, Integer.parseInt(table_data_1),
                                                         table_data_2.charAt(0),
                                                         Double.parseDouble(table_data_3), table_data_4.charAt(0),
@@ -159,7 +172,7 @@ public class GUI {
                                                         Double.parseDouble(table_data_6));
                                 } catch (NumberFormatException | noSegmentException e1) {
                                         // TODO Auto-generated catch block
-                                        e1.printStackTrace();
+                                        wrongValue(e1);
                                 }
 
                                 for (Vehicle fv : mg.vehicleWest) {
@@ -180,6 +193,11 @@ public class GUI {
 
                 mainframe.setVisible(true);
 
+        }
+
+        // valuen error exception
+        public void wrongValue(Exception ex) {
+                JOptionPane.showMessageDialog(null, ex, "Wrong Value", 0);
         }
 
         public void getVehicleData() {
@@ -219,16 +237,14 @@ public class GUI {
 
         }
 
-        // testing of stat table
-
         // assigning statstical data in table
         public void setStatData() {
                 int rocount = statModel.getRowCount();
-              
+
                 for (int i = rocount - 1; i >= 0; i--) {
                         statModel.removeRow(i);
                 }
-        
+
                 Double[] fg = null;
                 HashMap<Character, Double[]> stat = mg.calSegment();
                 for (char i : stat.keySet()) {

@@ -27,7 +27,10 @@ public class vehicleManger {
 
                 String[] temp = veh.split(",");
                 if (temp[2].charAt(0) == 'E' || temp[2].charAt(0) == 'W' || temp[2].charAt(0) == 'N'
-                        || temp[2].charAt(0) == 'S') {
+                        || temp[2].charAt(0) == 'S' ) {
+                            if(temp[4].charAt(0) == 'E' || temp[4].charAt(0) == 'W'
+                            || temp[4].charAt(0) == 'N'
+                            || temp[4].charAt(0) == 'S'){
                     Vehicle vhi = new Vehicle(temp[0], Integer.parseInt(temp[1]), temp[2].charAt(0),
                             Double.parseDouble(temp[3]), temp[4].charAt(0), Boolean.parseBoolean(temp[5]),
                             Double.parseDouble(temp[6]), Double.parseDouble(temp[7]));
@@ -44,7 +47,12 @@ public class vehicleManger {
 
                         vehicleSouth.add(vhi);
                     }
-                } else {
+                }
+            else{
+                throw new noSegmentException(
+                            temp[4].charAt(0) + " segment doesnt Exist. Only W,N,E,S segments exsits.");
+
+            } }else {
                     throw new noSegmentException(
                             temp[2].charAt(0) + " segment doesnt Exist. Only W,N,E,S segments exsits.");
                 }
@@ -60,25 +68,29 @@ public class vehicleManger {
             double co2) throws noSegmentException {
 
         if (in_s == 'E' || in_s == 'W' || in_s == 'N' || in_s == 'S') {
-            Vehicle fc = new Vehicle(typ, num, in_s, cross_time, direct_to, false, leng, co2);
+            if (direct_to == 'E' || direct_to == 'W'
+                    || direct_to == 'N' || direct_to == 'S') {
+                Vehicle fc = new Vehicle(typ, num, in_s, cross_time, direct_to, false, leng, co2);
 
-            if (in_s == 'E') {
-                vehicleEast.add(fc);
-            } else if (in_s == 'W') {
+                if (in_s == 'E') {
+                    vehicleEast.add(fc);
+                } else if (in_s == 'W') {
 
-                vehicleWest.add(fc);
-            } else if (in_s == 'N') {
+                    vehicleWest.add(fc);
+                } else if (in_s == 'N') {
 
-                vehicleNorth.add(fc);
-            } else if (in_s == 'S') {
+                    vehicleNorth.add(fc);
+                } else if (in_s == 'S') {
 
-                vehicleSouth.add(fc);
+                    vehicleSouth.add(fc);
+                }
+            } else {
+                throw new noSegmentException(direct_to + " segment doesnt Exist. Only W, N, E, S segments exsits.");
+
             }
         } else {
             throw new noSegmentException(in_s + " segment doesnt Exist. Only W, N, E, S segments exsits.");
         }
-
-        
 
     }
 
