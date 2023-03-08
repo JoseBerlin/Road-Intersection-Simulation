@@ -93,8 +93,8 @@ public class GUI {
                 JLabel kg = new JLabel("kg");
 
                 JLabel val = new JLabel();
-        
-                String tco2=mg.calCo2()+"";
+
+                String tco2 = mg.calCo2() + "";
                 val.setText(tco2);
                 JPanel co2_panel = new JPanel();
                 co2_panel.add(co2, BorderLayout.WEST);
@@ -168,6 +168,7 @@ public class GUI {
                                 }
                                 System.out.println("----------------------");
                                 getVehicleData();
+                                setStatData();
 
                         }
 
@@ -222,7 +223,12 @@ public class GUI {
 
         // assigning statstical data in table
         public void setStatData() {
-
+                int rocount = statModel.getRowCount();
+              
+                for (int i = rocount - 1; i >= 0; i--) {
+                        statModel.removeRow(i);
+                }
+        
                 Double[] fg = null;
                 HashMap<Character, Double[]> stat = mg.calSegment();
                 for (char i : stat.keySet()) {

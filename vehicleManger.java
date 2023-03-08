@@ -78,6 +78,8 @@ public class vehicleManger {
             throw new noSegmentException(in_s + " segment doesnt Exist. Only W, N, E, S segments exsits.");
         }
 
+        
+
     }
 
     // Reading intersection csv file and adding it to stack

@@ -41,8 +41,11 @@ public class Vehicle {
         return direction_to;
     }
 
-    public boolean isCrossed() {
-        return crossed;
+    public String isCrossed() {
+        if (crossed == false) {
+            return "waiting";
+        }
+        return "crossed";
     }
 
     public double getLength() {
@@ -53,7 +56,7 @@ public class Vehicle {
         return co2_emission;
     }
 
-    public double estimatedEmmision(){
-        return co2_emission*crossing_time+length;
+    public double estimatedEmmision() {
+        return co2_emission * crossing_time + length;
     }
 }
