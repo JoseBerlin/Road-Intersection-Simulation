@@ -46,7 +46,7 @@ public class GUI {
                 getVehicleData();
                 veh_tbl.getTableHeader().setReorderingAllowed(false); // setting coumn reordering order as false
                 veh_tbl.setAutoCreateRowSorter(true); // setting row sorting order as true for the table
-                veh_tbl.setEnabled(false); // Setting the table's data non editable
+                veh_tbl.setEnabled(false); // Setting the table's data non-editable
                 JScrollPane veh_scroll = new JScrollPane(veh_tbl); // creating the scrollable pane for table
                 veh_scroll.setPreferredSize(new Dimension(500, 300));
                 veh_scroll.setBorder(BorderFactory.createTitledBorder(
@@ -191,6 +191,24 @@ public class GUI {
                         }
                 });
 
+                // Handling JFrame close Button
+                exit.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                                try {
+                                        FileWriter writer = new FileWriter("report.txt");
+                                        writer.write(getContent());
+                                        writer.close();
+                                        JOptionPane.showMessageDialog(null, "The simulation report has been generated",
+                                                "Report",
+                                                JOptionPane.INFORMATION_MESSAGE);
+                                        System.exit(0);
+                                } catch (IOException ex) {
+                                        ex.printStackTrace();
+                                }
+                        }
+                });
+
                 mainframe.setVisible(true);
 
         }
@@ -200,6 +218,9 @@ public class GUI {
                 JOptionPane.showMessageDialog(null, ex, "Wrong Value", 0);
         }
 
+        /**
+         * Function to get Vehicle Data from vehicle.csv
+         */
         public void getVehicleData() {
                 int rocount = tableModel.getRowCount();
                 for (int i = rocount - 1; i >= 0; i--) {
@@ -237,7 +258,9 @@ public class GUI {
 
         }
 
-        // assigning statstical data in table
+        /**
+         * Function to assign stat data in table.
+         */
         public void setStatData() {
                 int rocount = statModel.getRowCount();
 
@@ -254,6 +277,11 @@ public class GUI {
                 }
         }
 
+        /**
+         * Function to get Phase Table Data.
+         *
+         * @return Object[][]
+         */
         public Object[][] getPhaseData() {
                 Collection<Intersection> intersection = mg.intersection;
                 Object[][] abc = intersection
@@ -262,6 +290,53 @@ public class GUI {
                                                 String.valueOf(inter.getDuration()) })
                                 .toArray(String[][]::new);
                 return abc;
+        }
+
+        /**
+         * Function to get Content for the Report.
+         *
+         * @return String
+         */
+        public String getContent() {
+                String content = "\t\t\tROAD SIMULATION REPORT\n\t\t\t~~~~ ~~~~~~~~~~ ~~~~~~\n\nNumber of Vehicles crossed\n------ -- -------- -------\n";
+
+                content += "Phase " + getPhaseData()[0][0].toString() + "\t:\t" +
+                        Integer.toString(get_veh_count(mg.vehicleEast)) + " Vehicles\n";
+                content += "Phase " + getPhaseData()[1][0].toString() + "\t:\t" +
+                        Integer.toString(get_veh_count(mg.vehicleNorth)) + " Vehicles\n";
+                content += "Phase " + getPhaseData()[2][0].toString() + "\t:\t" +
+                        Integer.toString(get_veh_count(mg.vehicleSouth)) + " Vehicles\n";
+                content += "Phase " + getPhaseData()[3][0].toString() + "\t:\t" +
+                        Integer.toString(get_veh_count(mg.vehicleWest)) + " Vehicles\n";
+                content += "Phase " + getPhaseData()[4][0].toString() + "\t:\t" +
+                        Integer.toString(get_veh_count(mg.vehicleEast)) + " Vehicles\n";
+                content += "Phase " + getPhaseData()[5][0].toString() + "\t:\t" +
+                        Integer.toString(get_veh_count(mg.vehicleNorth)) + " Vehicles\n";
+                content += "Phase " + getPhaseData()[6][0].toString() + "\t:\t" +
+                        Integer.toString(get_veh_count(mg.vehicleSouth)) + " Vehicles\n";
+                content += "Phase " + getPhaseData()[7][0].toString() + "\t:\t" +
+                        Integer.toString(get_veh_count(mg.vehicleWest)) + " Vehicles\n\n";
+
+                content += "Average Waiting Time to cross\t:\t" + "00:00 minutes" + "\n\n";
+                content += "Total CO2 Emmision \t\t:\t" + Double.toString(mg.calCo2());
+                return content;
+
+        }
+
+        /**
+         * Function to get vehicle count.
+         * @param myQueue
+         * @return int
+         */
+        public int get_veh_count(Queue<Vehicle> myQueue) {
+                int c_veh_count = 0; // Crossed vehicle count
+                for (Vehicle vh : myQueue) {
+                        if (vh.isCrossed().equals(true)) // Checking whether the vehicle has been crossed
+                        {
+                                c_veh_count += 1;
+                        }
+                }
+                return c_veh_count;
         }
 
         // public Object[][] getStatisticData(){
