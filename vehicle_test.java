@@ -1,21 +1,10 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.HashMap;
-
-import org.junit.After;
-import org.junit.Before;
 import org.junit.jupiter.api.Test;
 
 public class vehicle_test {
-    // private Double expected2;
 
-    // @Before
-    // public void init() throws noSegmentException {
-    //     vehicleManger vm = new vehicleManger();
-    //     vm.vehicle();
-    //     HashMap<Character, Double[]> fgf = vm.calSegment();
-    //     expected2 = 4343436.9;
-    // }
+ 
 
     @Test
     void Type() {
@@ -41,21 +30,15 @@ public class vehicle_test {
 
     }
 
-    // testing of stat table
-    // @Test
-    // void StatTableTest() throws noSegmentException {
+    @Test
+    void estEmmiosn() {
+        Vehicle vc = new Vehicle("car", 1003, 'E', 10, 'S', false, 4.98, 2);
+        Double expected = vc.estimatedEmmision();
+        Double actual = 24.98;
+        assertEquals(expected, actual);
 
-    //     assertEquals(expected2, 12.0);
 
-    //     assertEquals(expected2, 21.8);
+    }
 
-    //     assertEquals(expected2, 30.0);
-
-    // }
-
-    // @After
-    // public void tear(){
-     
-    //     expected2 = 4343436.9;
-    // }
+   
 }

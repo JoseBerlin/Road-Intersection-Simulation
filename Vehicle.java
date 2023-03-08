@@ -52,4 +52,8 @@ public class Vehicle {
     public double getCo2_emission() {
         return co2_emission;
     }
+
+    public double estimatedEmmision(){
+        return co2_emission*crossing_time+length;
+    }
 }

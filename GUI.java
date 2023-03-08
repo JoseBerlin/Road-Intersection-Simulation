@@ -91,7 +91,11 @@ public class GUI {
                 JLabel co2 = new JLabel("CO2 Emission : ");
                 co2.setFont(new Font("Arial", Font.BOLD, 16));
                 JLabel kg = new JLabel("kg");
-                JTextField val = new JTextField();
+
+                JLabel val = new JLabel();
+        
+                String tco2=mg.calCo2()+"";
+                val.setText(tco2);
                 JPanel co2_panel = new JPanel();
                 co2_panel.add(co2, BorderLayout.WEST);
                 co2_panel.add(val, BorderLayout.CENTER);
@@ -214,9 +218,8 @@ public class GUI {
 
         }
 
-         //testing of stat table
+        // testing of stat table
 
-    
         // assigning statstical data in table
         public void setStatData() {
 

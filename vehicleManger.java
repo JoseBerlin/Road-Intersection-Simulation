@@ -10,7 +10,7 @@ public class vehicleManger {
     Queue<Vehicle> vehicleNorth = new LinkedList<>();
     Queue<Vehicle> vehicleSouth = new LinkedList<>();
 
-    Double crossingTime, waitintTime, waitingLength;
+    Double crossingTime, waitintTime, waitingLength, totalCo2;
 
     // Reading vehicle csv file and adding it to stack
     public void vehicle() throws noSegmentException {
@@ -110,6 +110,24 @@ public class vehicleManger {
         // }
         // System.out.println();
         // }
+    }
+
+    // calculation for CO2 emmision
+    public double calCo2() {
+        totalCo2 = 0.0;
+        for (Vehicle vh : vehicleEast) {
+            totalCo2 += vh.getCrossing_time();
+        }
+        for (Vehicle vh : vehicleWest) {
+            totalCo2 += vh.getCrossing_time();
+        }
+        for (Vehicle vh : vehicleNorth) {
+            totalCo2 += vh.getCrossing_time();
+        }
+        for (Vehicle vh : vehicleSouth) {
+            totalCo2 += vh.getCrossing_time();
+        }
+        return totalCo2;
     }
 
     // initializing the values to nill
