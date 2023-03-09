@@ -4,8 +4,6 @@ import org.junit.jupiter.api.Test;
 
 public class vehicle_test {
 
- 
-
     @Test
     void Type() {
 
@@ -31,14 +29,12 @@ public class vehicle_test {
     }
 
     @Test
-    void estEmmiosn() {
+    void estEmmission() {
         Vehicle vc = new Vehicle("car", 1003, 'E', 10, 'S', false, 4.98, 2);
         Double expected = vc.estimatedEmmision();
         Double actual = 24.98;
         assertEquals(expected, actual);
 
-
     }
 
-   
 }

@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.util.*;
 
 public class vehicleManger {
-    Stack<Intersection> intersection = new Stack<>();
-    Queue<Vehicle> vehicleEast = new LinkedList<>();
-    Queue<Vehicle> vehicleWest = new LinkedList<>();
-    Queue<Vehicle> vehicleNorth = new LinkedList<>();
-    Queue<Vehicle> vehicleSouth = new LinkedList<>();
+    public Stack<Intersection> intersection = new Stack<>();
+    public Queue<Vehicle> vehicleEast = new LinkedList<>();
+    public Queue<Vehicle> vehicleWest = new LinkedList<>();
+    public Queue<Vehicle> vehicleNorth = new LinkedList<>();
+    public Queue<Vehicle> vehicleSouth = new LinkedList<>();
 
     Double crossingTime, waitintTime, waitingLength, totalCo2;
 
@@ -27,32 +27,32 @@ public class vehicleManger {
 
                 String[] temp = veh.split(",");
                 if (temp[2].charAt(0) == 'E' || temp[2].charAt(0) == 'W' || temp[2].charAt(0) == 'N'
-                        || temp[2].charAt(0) == 'S' ) {
-                            if(temp[4].charAt(0) == 'E' || temp[4].charAt(0) == 'W'
+                        || temp[2].charAt(0) == 'S') {
+                    if (temp[4].charAt(0) == 'E' || temp[4].charAt(0) == 'W'
                             || temp[4].charAt(0) == 'N'
-                            || temp[4].charAt(0) == 'S'){
-                    Vehicle vhi = new Vehicle(temp[0], Integer.parseInt(temp[1]), temp[2].charAt(0),
-                            Double.parseDouble(temp[3]), temp[4].charAt(0), Boolean.parseBoolean(temp[5]),
-                            Double.parseDouble(temp[6]), Double.parseDouble(temp[7]));
-                    if (temp[2].equals("E")) {
+                            || temp[4].charAt(0) == 'S') {
+                        Vehicle vhi = new Vehicle(temp[0], Integer.parseInt(temp[1]), temp[2].charAt(0),
+                                Double.parseDouble(temp[3]), temp[4].charAt(0), Boolean.parseBoolean(temp[5]),
+                                Double.parseDouble(temp[6]), Double.parseDouble(temp[7]));
+                        if (temp[2].equals("E")) {
 
-                        vehicleEast.add(vhi);
-                    } else if (temp[2].equals("W")) {
+                            vehicleEast.add(vhi);
+                        } else if (temp[2].equals("W")) {
 
-                        vehicleWest.add(vhi);
-                    } else if (temp[2].equals("N")) {
+                            vehicleWest.add(vhi);
+                        } else if (temp[2].equals("N")) {
 
-                        vehicleNorth.add(vhi);
-                    } else if (temp[2].equals("S")) {
+                            vehicleNorth.add(vhi);
+                        } else if (temp[2].equals("S")) {
 
-                        vehicleSouth.add(vhi);
+                            vehicleSouth.add(vhi);
+                        }
+                    } else {
+                        throw new noSegmentException(
+                                temp[4].charAt(0) + " segment doesnt Exist. Only W,N,E,S segments exsits.");
+
                     }
-                }
-            else{
-                throw new noSegmentException(
-                            temp[4].charAt(0) + " segment doesnt Exist. Only W,N,E,S segments exsits.");
-
-            } }else {
+                } else {
                     throw new noSegmentException(
                             temp[2].charAt(0) + " segment doesnt Exist. Only W,N,E,S segments exsits.");
                 }

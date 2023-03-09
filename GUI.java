@@ -118,7 +118,7 @@ public class GUI {
                 optbox.addItem("bus");
                 optbox.addItem("truck");
                 add_veh_tbl = new JTable(add_data, add_tbl_head);
-                TableColumn fcol=add_veh_tbl.getColumnModel().getColumn(0);
+                TableColumn fcol = add_veh_tbl.getColumnModel().getColumn(0);
                 fcol.setCellEditor(new DefaultCellEditor(optbox));
                 JScrollPane add_veh_scroll = new JScrollPane(add_veh_tbl);
                 add_veh_scroll.setPreferredSize(new Dimension(700, 39));
@@ -200,8 +200,8 @@ public class GUI {
                                         writer.write(getContent());
                                         writer.close();
                                         JOptionPane.showMessageDialog(null, "The simulation report has been generated",
-                                                "Report",
-                                                JOptionPane.INFORMATION_MESSAGE);
+                                                        "Report",
+                                                        JOptionPane.INFORMATION_MESSAGE);
                                         System.exit(0);
                                 } catch (IOException ex) {
                                         ex.printStackTrace();
@@ -213,7 +213,7 @@ public class GUI {
 
         }
 
-        // valuen error exception
+        // value error exception
         public void wrongValue(Exception ex) {
                 JOptionPane.showMessageDialog(null, ex, "Wrong Value", 0);
         }
@@ -301,21 +301,21 @@ public class GUI {
                 String content = "\t\t\tROAD SIMULATION REPORT\n\t\t\t~~~~ ~~~~~~~~~~ ~~~~~~\n\nNumber of Vehicles crossed\n------ -- -------- -------\n";
 
                 content += "Phase " + getPhaseData()[0][0].toString() + "\t:\t" +
-                        Integer.toString(get_veh_count(mg.vehicleEast)) + " Vehicles\n";
+                                Integer.toString(get_veh_count(mg.vehicleEast)) + " Vehicles\n";
                 content += "Phase " + getPhaseData()[1][0].toString() + "\t:\t" +
-                        Integer.toString(get_veh_count(mg.vehicleNorth)) + " Vehicles\n";
+                                Integer.toString(get_veh_count(mg.vehicleNorth)) + " Vehicles\n";
                 content += "Phase " + getPhaseData()[2][0].toString() + "\t:\t" +
-                        Integer.toString(get_veh_count(mg.vehicleSouth)) + " Vehicles\n";
+                                Integer.toString(get_veh_count(mg.vehicleSouth)) + " Vehicles\n";
                 content += "Phase " + getPhaseData()[3][0].toString() + "\t:\t" +
-                        Integer.toString(get_veh_count(mg.vehicleWest)) + " Vehicles\n";
+                                Integer.toString(get_veh_count(mg.vehicleWest)) + " Vehicles\n";
                 content += "Phase " + getPhaseData()[4][0].toString() + "\t:\t" +
-                        Integer.toString(get_veh_count(mg.vehicleEast)) + " Vehicles\n";
+                                Integer.toString(get_veh_count(mg.vehicleEast)) + " Vehicles\n";
                 content += "Phase " + getPhaseData()[5][0].toString() + "\t:\t" +
-                        Integer.toString(get_veh_count(mg.vehicleNorth)) + " Vehicles\n";
+                                Integer.toString(get_veh_count(mg.vehicleNorth)) + " Vehicles\n";
                 content += "Phase " + getPhaseData()[6][0].toString() + "\t:\t" +
-                        Integer.toString(get_veh_count(mg.vehicleSouth)) + " Vehicles\n";
+                                Integer.toString(get_veh_count(mg.vehicleSouth)) + " Vehicles\n";
                 content += "Phase " + getPhaseData()[7][0].toString() + "\t:\t" +
-                        Integer.toString(get_veh_count(mg.vehicleWest)) + " Vehicles\n\n";
+                                Integer.toString(get_veh_count(mg.vehicleWest)) + " Vehicles\n\n";
 
                 content += "Average Waiting Time to cross\t:\t" + "00:00 minutes" + "\n\n";
                 content += "Total CO2 Emmision \t\t:\t" + Double.toString(mg.calCo2());
@@ -325,6 +325,7 @@ public class GUI {
 
         /**
          * Function to get vehicle count.
+         * 
          * @param myQueue
          * @return int
          */
@@ -339,7 +340,4 @@ public class GUI {
                 return c_veh_count;
         }
 
-        // public Object[][] getStatisticData(){
-        //
-        // }
 }
