@@ -5,12 +5,12 @@ public class Intersection {
     private char direction_1;
     private char direction_2;
 
-    public Intersection(int ph, int dur, char seg, char d1, char d2) {
+    public Intersection(int ph, int dur, char seg, char i, char j) {
         phases = ph;
         duration = dur;
         segment_in = seg;
-        direction_1 = d1;
-        direction_2 = d2;
+        direction_1 = i;
+        direction_2 = j;
     }
 
     public int getPhases() {
@@ -31,5 +31,13 @@ public class Intersection {
 
     public char getDirection_2() {
         return direction_2;
+    }
+
+    public boolean crossPossible(char dto,char cfm){
+        if(dto==segment_in && direction_1==cfm || direction_2==cfm){
+            return true;
+        }
+
+        return false;
     }
 }

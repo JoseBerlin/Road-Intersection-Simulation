@@ -18,7 +18,7 @@ public class GUI {
         JPanel mainpanel;
         private DefaultTableModel tableModel, statModel;
         private JTable veh_tbl, ps_tbl, stat_tbl, add_veh_tbl;
-        private JButton add, cancel, exit, add_pedestrian;
+        private JButton add, exit, add_pedestrian, delete;
         Collection<Vehicle> vehicleList;
 
         vehicleManger mg;
@@ -130,9 +130,9 @@ public class GUI {
 
                 // Creating Buttons
                 add = new JButton("Add");
-                cancel = new JButton("Cancel");
                 exit = new JButton("Exit");
                 add_pedestrian = new JButton("Add Pedestrians");
+                delete = new JButton("Delete");
 
                 // Separate panel for Buttons
                 JPanel South_panel = new JPanel(new FlowLayout());
@@ -140,7 +140,7 @@ public class GUI {
 
                 // Adding buttons to the buttons panel
                 South_panel.add(add, BorderLayout.WEST);
-                South_panel.add(cancel, BorderLayout.CENTER);
+                South_panel.add(delete, BorderLayout.CENTER);
                 South_panel.add(exit, BorderLayout.EAST);
                 South_panel.add(add_pedestrian, BorderLayout.EAST);
 
@@ -151,8 +151,6 @@ public class GUI {
 
                 // Adding vehicles from gui
                 add.addActionListener(new ActionListener() {
-                        Scanner testtype = new Scanner(System.in);
-
                         public void actionPerformed(ActionEvent e) {
 
                                 try {
@@ -179,7 +177,7 @@ public class GUI {
                                         System.out.println(fv.getPlate_no());
 
                                 }
-                                System.out.println("----------------------");
+
                                 getVehicleData();
                                 setStatData();
 
@@ -195,25 +193,25 @@ public class GUI {
                 exit.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                                int confriming = JOptionPane.showConfirmDialog(null, 
-        "Are you sure you want to exit the program?", "Exit message",
-        JOptionPane.YES_NO_OPTION);
+                                int confriming = JOptionPane.showConfirmDialog(null,
+                                                "Are you sure you want to exit the program?", "Exit message",
+                                                JOptionPane.YES_NO_OPTION);
 
-                                        if (confriming == JOptionPane.YES_OPTION) {
-                                                              
-                                        
-                                try {
-                                        FileWriter writer = new FileWriter("report.txt");
-                                        writer.write(getContent());
-                                        writer.close();
-                                        JOptionPane.showMessageDialog(null, "The simulation report has been generated",
-                                                        "Report",
-                                                        JOptionPane.INFORMATION_MESSAGE);
-                                        System.exit(0);
-                                } catch (IOException ex) {
-                                        ex.printStackTrace();
+                                if (confriming == JOptionPane.YES_OPTION) {
+
+                                        try {
+                                                FileWriter writer = new FileWriter("report.txt");
+                                                writer.write(getContent());
+                                                writer.close();
+                                                JOptionPane.showMessageDialog(null,
+                                                                "The simulation report has been generated",
+                                                                "Report",
+                                                                JOptionPane.INFORMATION_MESSAGE);
+                                                System.exit(0);
+                                        } catch (IOException ex) {
+                                                ex.printStackTrace();
+                                        }
                                 }
-                        }
                         }
                 });
 
