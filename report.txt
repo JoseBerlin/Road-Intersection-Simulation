@@ -1,0 +1,17 @@
+			ROAD SIMULATION REPORT
+			~~~~ ~~~~~~~~~~ ~~~~~~
+
+Number of Vehicles crossed
+------ -- -------- -------
+Phase 1	:	0 Vehicles
+Phase 2	:	0 Vehicles
+Phase 3	:	0 Vehicles
+Phase 4	:	0 Vehicles
+Phase 5	:	0 Vehicles
+Phase 6	:	0 Vehicles
+Phase 7	:	0 Vehicles
+Phase 8	:	0 Vehicles
+
+Average Waiting Time to cross	:	00:00 minutes
+
+Total CO2 Emmision 		:	48.0

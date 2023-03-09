@@ -195,6 +195,13 @@ public class GUI {
                 exit.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
+                                int confriming = JOptionPane.showConfirmDialog(null, 
+        "Are you sure you want to exit the program?", "Exit message",
+        JOptionPane.YES_NO_OPTION);
+
+                                        if (confriming == JOptionPane.YES_OPTION) {
+                                                              
+                                        
                                 try {
                                         FileWriter writer = new FileWriter("report.txt");
                                         writer.write(getContent());
@@ -206,6 +213,7 @@ public class GUI {
                                 } catch (IOException ex) {
                                         ex.printStackTrace();
                                 }
+                        }
                         }
                 });
 
