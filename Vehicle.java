@@ -9,6 +9,8 @@ public class Vehicle {
     private double length;
     private double co2_emission;
 
+    public Vehicle(){}
+
     public Vehicle(String typ, int num, char in_s, double cross_time, char direct_to, boolean cross, double leng,
             double co2) {
         type = typ;

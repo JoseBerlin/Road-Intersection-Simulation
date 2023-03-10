@@ -30,6 +30,7 @@ public class vehicle_test {
 
     @Test
     void estEmmission() {
+        // Estimate Emission Function Test
         Vehicle vc = new Vehicle("car", 1003, 'E', 10, 'S', false, 4.98, 2);
         Double expected = vc.estimatedEmmision();
         Double actual = 24.98;
@@ -39,7 +40,7 @@ public class vehicle_test {
 
     @Test
     void intersection() {
-
+        // Estimate Emission Function Test
         Intersection ib = new Intersection(2, 38, 'N', 'S', ' ');
 
         assertEquals(ib.getPhases(), 2);
@@ -56,7 +57,7 @@ public class vehicle_test {
 
     @Test
     void crosstest() {
-
+        // Crossing Road Method Test
         Vehicle vc = new Vehicle("car", 1003, 'E', 10, 'S', false, 4.98, 2);
         Intersection ib = new Intersection(2, 38, 'E', 'S', 'W');
         boolean cf = ib.crossPossible(vc.getIn_segment(), vc.getDirection_to());
