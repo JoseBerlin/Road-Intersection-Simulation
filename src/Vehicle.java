@@ -61,4 +61,7 @@ public class Vehicle {
     public double estimatedEmmision() {
         return co2_emission * crossing_time + length;
     }
+
+    public void setCrossed(boolean b) {
+    }
 }

@@ -3,29 +3,33 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
-public class vehicleManger {
-    public Stack<Intersection> intersection = new Stack<>();
-    public Queue<Vehicle> vehicleEast = new LinkedList<>();
-    public Queue<Vehicle> vehicleWest = new LinkedList<>();
-    public Queue<Vehicle> vehicleNorth = new LinkedList<>();
-    public Queue<Vehicle> vehicleSouth = new LinkedList<>();
+public class VehicleModal extends Observable {
+    private Map<Character, Queue<Vehicle>> allvehicle;
+    private Stack<Intersection> intersection = new Stack<>();
+    private Queue<Vehicle> vehicleEast;
+    private Queue<Vehicle> vehicleWest;
+    private Queue<Vehicle> vehicleNorth;
+    private Queue<Vehicle> vehicleSouth;
 
     Double crossingTime, waitintTime, waitingLength, totalCo2;
 
+    public VehicleModal() {
+        vehicleEast = new LinkedList<>();
+        vehicleWest = new LinkedList<>();
+        vehicleNorth = new LinkedList<>();
+        vehicleSouth = new LinkedList<>();
+        allvehicle=new HashMap<>();
+        
+    }
+
     // Reading vehicle csv file and adding it to stack
-    public void vehicle() throws noSegmentException {
-        String veh = "";
-        int i = 0;
+    public void loadDataFromCSV(String filename) throws noSegmentException {
         try {
-            BufferedReader bfr = new BufferedReader(new FileReader("Vehicles.csv"));
-            while ((veh = bfr.readLine()) != null) {
-                if (i == 0) {
-                    i++;
-                    continue;
 
-                }
-
-                String[] temp = veh.split(",");
+            BufferedReader reader = new BufferedReader(new FileReader(filename));
+            String line = reader.readLine(); // Skip header line
+            while ((line = reader.readLine()) != null) {
+                String[] temp = line.split(",");
                 if (temp[2].charAt(0) == 'E' || temp[2].charAt(0) == 'W' || temp[2].charAt(0) == 'N'
                         || temp[2].charAt(0) == 'S') {
                     if (temp[4].charAt(0) == 'E' || temp[4].charAt(0) == 'W'
@@ -57,7 +61,11 @@ public class vehicleManger {
                             temp[2].charAt(0) + " segment doesnt Exist. Only W,N,E,S segments exsits.");
                 }
             }
-            bfr.close();
+            reader.close();
+
+            getVehicleQueue();
+             Change(allvehicle);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -74,16 +82,21 @@ public class vehicleManger {
 
                 if (in_s == 'E') {
                     vehicleEast.add(fc);
+
                 } else if (in_s == 'W') {
 
                     vehicleWest.add(fc);
+
                 } else if (in_s == 'N') {
 
                     vehicleNorth.add(fc);
+
                 } else if (in_s == 'S') {
 
                     vehicleSouth.add(fc);
+
                 }
+
             } else {
                 throw new noSegmentException(direct_to + " segment doesnt Exist. Only W, N, E, S segments exsits.");
 
@@ -92,6 +105,22 @@ public class vehicleManger {
             throw new noSegmentException(in_s + " segment doesnt Exist. Only W, N, E, S segments exsits.");
         }
 
+    }
+
+    // returning all vehicles data
+    public Map<Character, Queue<Vehicle>> getVehicleQueue() throws noSegmentException {
+        
+        allvehicle.put('E', vehicleEast);
+        allvehicle.put('W', vehicleWest);
+        allvehicle.put('N', vehicleNorth);
+        allvehicle.put('S', vehicleSouth);
+
+        return allvehicle;
+    }
+
+    public void Change(Object obj) {
+        setChanged();
+        notifyObservers(obj);
     }
 
     // Reading intersection csv file and adding it to stack

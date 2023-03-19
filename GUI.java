@@ -2,9 +2,6 @@ import java.io.*;
 import java.util.*;
 import java.util.Queue;
 import javax.swing.*; //used for user interface
-import javax.swing.text.SimpleAttributeSet; //used for changing fonts
-import javax.swing.text.StyleConstants; //text styles
-import javax.swing.text.StyledDocument; //text styles
 import java.awt.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
@@ -13,7 +10,7 @@ import javax.swing.table.TableColumn;
 import java.awt.event.ActionListener; //listens for mouse clicks on buttons
 import java.awt.event.ActionEvent; //handles button press events
 
-public class GUI {
+public class GUI implements Observer {
         JFrame mainframe;
         JPanel mainpanel;
         private DefaultTableModel tableModel, statModel;
@@ -21,10 +18,10 @@ public class GUI {
         private JButton add, exit, add_pedestrian, delete;
         Collection<Vehicle> vehicleList;
 
-        vehicleManger mg;
+        VehicleModal mg;
+        VehicleModal md = new VehicleModal();
 
-        public void invoke(vehicleManger vehicle) {
-                mg = vehicle;
+        public void invoke() {
 
                 mainframe = new JFrame();
                 mainpanel = new JPanel();
@@ -43,7 +40,7 @@ public class GUI {
 
                 veh_tbl = new JTable();
                 veh_tbl.setModel(tableModel);
-                getVehicleData();
+
                 veh_tbl.getTableHeader().setReorderingAllowed(false); // setting coumn reordering order as false
                 veh_tbl.setAutoCreateRowSorter(true); // setting row sorting order as true for the table
                 veh_tbl.setEnabled(false); // Setting the table's data non-editable
@@ -59,55 +56,54 @@ public class GUI {
                 North_panel.add(veh_scroll, BorderLayout.WEST);
 
                 // 2.Phases table
-                String[] ps_tbl_head = { "Phase", "Duration" };
-                Object[][] ps_data = getPhaseData();
-                ps_tbl = new JTable(ps_data, ps_tbl_head);
-                ps_tbl.getTableHeader().setReorderingAllowed(false);
-                ps_tbl.setAutoCreateRowSorter(true);
-                ps_tbl.setEnabled(false);
-                JScrollPane ps_scroll = new JScrollPane(ps_tbl);
-                ps_scroll.setPreferredSize(new Dimension(200, 140));
-                ps_scroll.setBorder(BorderFactory.createTitledBorder(
-                                BorderFactory.createEtchedBorder(), "Phases", TitledBorder.CENTER,
-                                TitledBorder.CENTER));
-                North_panel.add(ps_scroll, BorderLayout.CENTER);
+                // String[] ps_tbl_head = { "Phase", "Duration" };
+                // Object[][] ps_data = getPhaseData();
+                // ps_tbl = new JTable(ps_data, ps_tbl_head);
+                // ps_tbl.getTableHeader().setReorderingAllowed(false);
+                // // ps_tbl.setAutoCreateRowSorter(true);
+                // ps_tbl.setEnabled(false);
+                // JScrollPane ps_scroll = new JScrollPane(ps_tbl);
+                // ps_scroll.setPreferredSize(new Dimension(200, 140));
+                // ps_scroll.setBorder(BorderFactory.createTitledBorder(
+                // BorderFactory.createEtchedBorder(), "Phases", TitledBorder.CENTER,
+                // TitledBorder.CENTER));
+                // North_panel.add(ps_scroll, BorderLayout.CENTER);
 
-                // 3.Statistics table
-                String[] stat_tbl_head = { "Segment", "Waiting time", "Waiting Length", "Cross time" };
-                statModel = new DefaultTableModel();
-                statModel.setColumnIdentifiers(stat_tbl_head);
-                stat_tbl = new JTable();
-                stat_tbl.setModel(statModel);
-                setStatData();
-                stat_tbl.getTableHeader().setReorderingAllowed(false);
-                stat_tbl.setEnabled(false);
-                stat_tbl.setAutoCreateRowSorter(true); // enables sorting
-                JScrollPane stat_scroll = new JScrollPane(stat_tbl);
-                stat_scroll.setPreferredSize(new Dimension(450, 150));
-                stat_scroll.setBorder(BorderFactory.createTitledBorder(
-                                BorderFactory.createEtchedBorder(), "Statistics", TitledBorder.CENTER,
-                                TitledBorder.CENTER));
+                // // 3.Statistics table
+                // String[] stat_tbl_head = { "Segment", "Waiting time", "Waiting Length",
+                // "Cross time" };
+                // statModel = new DefaultTableModel();
+                // statModel.setColumnIdentifiers(stat_tbl_head);
+                // stat_tbl = new JTable();
+                // stat_tbl.setModel(statModel);
 
-                // Co2 label & Text boxes
-                JLabel co2 = new JLabel("CO2 Emission : ");
-                co2.setFont(new Font("Arial", Font.BOLD, 16));
-                JLabel kg = new JLabel("kg");
+                // stat_tbl.getTableHeader().setReorderingAllowed(false);
+                // stat_tbl.setEnabled(false);
+                // stat_tbl.setAutoCreateRowSorter(true); // enables sorting
+                // JScrollPane stat_scroll = new JScrollPane(stat_tbl);
+                // stat_scroll.setPreferredSize(new Dimension(450, 150));
+                // stat_scroll.setBorder(BorderFactory.createTitledBorder(
+                // BorderFactory.createEtchedBorder(), "Statistics", TitledBorder.CENTER,
+                // TitledBorder.CENTER));
 
-                JLabel val = new JLabel();
+                // // Co2 label & Text boxes
+                // JLabel co2 = new JLabel("CO2 Emission : ");
+                // co2.setFont(new Font("Arial", Font.BOLD, 16));
+                // JLabel kg = new JLabel("kg");
+                // JLabel val = new JLabel();
+                // String tco2 = "fdfd";
+                // val.setText(tco2);
+                // JPanel co2_panel = new JPanel();
+                // co2_panel.add(co2, BorderLayout.WEST);
+                // co2_panel.add(val, BorderLayout.CENTER);
+                // co2_panel.add(kg, BorderLayout.EAST);
 
-                String tco2 = mg.calCo2() + "";
-                val.setText(tco2);
-                JPanel co2_panel = new JPanel();
-                co2_panel.add(co2, BorderLayout.WEST);
-                co2_panel.add(val, BorderLayout.CENTER);
-                co2_panel.add(kg, BorderLayout.EAST);
+                // // Adding stat panel and co2 panel
+                // JPanel stat_panel = new JPanel();
+                // stat_panel.add(stat_scroll, BorderLayout.NORTH);
 
-                // Adding stat panel and co2 panel
-                JPanel stat_panel = new JPanel();
-                stat_panel.add(stat_scroll, BorderLayout.NORTH);
-
-                North_panel.add(stat_panel, BorderLayout.EAST);
-                North_panel.add(co2_panel, BorderLayout.SOUTH);
+                // North_panel.add(stat_panel, BorderLayout.EAST);
+                // North_panel.add(co2_panel, BorderLayout.SOUTH);
 
                 // 4.Add vehicle table
                 String[] add_tbl_head = { "Type", "No.", "Segment", "Crossing_time", "Direction", "Length", "Co2" };
@@ -148,7 +144,6 @@ public class GUI {
                 mainframe.add(North_panel, BorderLayout.NORTH);
                 mainframe.add(Centre_panel, BorderLayout.CENTER);
                 mainframe.add(South_panel, BorderLayout.SOUTH);
-
                 // Adding vehicles from gui
                 add.addActionListener(new ActionListener() {
                         public void actionPerformed(ActionEvent e) {
@@ -163,23 +158,21 @@ public class GUI {
                                         String table_data_6 = GetData(add_veh_tbl, 0, 6);
 
                                         table_data_0.getClass().equals(String.class);
-                                        mg.add_Vehicle_gui(table_data_0, Integer.parseInt(table_data_1),
+
+                                        md.add_Vehicle_gui(table_data_0, Integer.parseInt(table_data_1),
                                                         table_data_2.charAt(0),
                                                         Double.parseDouble(table_data_3), table_data_4.charAt(0),
                                                         Double.parseDouble(table_data_5),
                                                         Double.parseDouble(table_data_6));
+
+                                        Map<Character, Queue<Vehicle>> vehc = md.getVehicleQueue();
+                                        // md.loadDataFromCSV("Vehicles.csv");
+                                        update(md, vehc);
+
                                 } catch (NumberFormatException | noSegmentException e1) {
                                         // TODO Auto-generated catch block
                                         wrongValue(e1);
                                 }
-
-                                for (Vehicle fv : mg.vehicleWest) {
-                                        System.out.println(fv.getPlate_no());
-
-                                }
-
-                                getVehicleData();
-                                setStatData();
 
                         }
 
@@ -201,7 +194,7 @@ public class GUI {
 
                                         try {
                                                 FileWriter writer = new FileWriter("report.txt");
-                                                writer.write(getContent());
+                                                // writer.write(getContent());
                                                 writer.close();
                                                 JOptionPane.showMessageDialog(null,
                                                                 "The simulation report has been generated",
@@ -215,8 +208,6 @@ public class GUI {
                         }
                 });
 
-                mainframe.setVisible(true);
-
         }
 
         // value error exception
@@ -227,61 +218,51 @@ public class GUI {
         /**
          * Function to get Vehicle Data from vehicle.csv
          */
-        public void getVehicleData() {
-                int rocount = tableModel.getRowCount();
-                for (int i = rocount - 1; i >= 0; i--) {
-                        tableModel.removeRow(i);
+        public void update(Observable obs, Object arg) {
+
+                Queue<Vehicle> upvehicle;
+                System.out.println("DSd");
+
+                if (obs instanceof VehicleModal) {
+
+                        Map<Character, Queue<Vehicle>> allvehicle = (Map<Character, Queue<Vehicle>>) arg;
+                        System.out.println(allvehicle.get("E"));
+                        tableModel.setRowCount(0);
+                        for (Map.Entry<Character, Queue<Vehicle>> veh : allvehicle.entrySet()) {
+
+                                upvehicle = veh.getValue();
+
+                                for (Vehicle vehicle : upvehicle) {
+                                        Object[] rowData = { vehicle.getType(), vehicle.getPlate_no(),
+                                                        vehicle.getIn_segment(),
+                                                        vehicle.getCrossing_time(), vehicle.getDirection_to(),
+                                                        vehicle.isCrossed(),
+                                                        vehicle.getLength(), vehicle.getCo2_emission() };
+                                        tableModel.addRow(rowData);
+                                }
+                        }
                 }
 
-                for (Vehicle vh : mg.vehicleEast) {
-                        String[] abc = { String.valueOf(vh.getType()), String.valueOf(vh.getPlate_no()),
-                                        String.valueOf(vh.getIn_segment()), String.valueOf(vh.getCrossing_time()),
-                                        String.valueOf(vh.getDirection_to()), String.valueOf(vh.isCrossed()),
-                                        String.valueOf(vh.getLength()) };
-                        tableModel.addRow(abc);
-                }
-                for (Vehicle vh : mg.vehicleNorth) {
-                        String[] abc = { String.valueOf(vh.getType()), String.valueOf(vh.getPlate_no()),
-                                        String.valueOf(vh.getIn_segment()), String.valueOf(vh.getCrossing_time()),
-                                        String.valueOf(vh.getDirection_to()), String.valueOf(vh.isCrossed()),
-                                        String.valueOf(vh.getLength()) };
-                        tableModel.addRow(abc);
-                }
-                for (Vehicle vh : mg.vehicleSouth) {
-                        String[] abc = { String.valueOf(vh.getType()), String.valueOf(vh.getPlate_no()),
-                                        String.valueOf(vh.getIn_segment()), String.valueOf(vh.getCrossing_time()),
-                                        String.valueOf(vh.getDirection_to()), String.valueOf(vh.isCrossed()),
-                                        String.valueOf(vh.getLength()) };
-                        tableModel.addRow(abc);
-                }
-                for (Vehicle vh : mg.vehicleWest) {
-                        String[] abc = { String.valueOf(vh.getType()), String.valueOf(vh.getPlate_no()),
-                                        String.valueOf(vh.getIn_segment()), String.valueOf(vh.getCrossing_time()),
-                                        String.valueOf(vh.getDirection_to()), String.valueOf(vh.isCrossed()),
-                                        String.valueOf(vh.getLength()) };
-                        tableModel.addRow(abc);
-                }
+        }
 
+        public void show() {
+                mainframe.setVisible(true);
         }
 
         /**
          * Function to assign stat data in table.
          */
-        public void setStatData() {
-                int rocount = statModel.getRowCount();
+        // public void setStatData() {
+        // int rocount = statModel.getRowCount();
 
-                for (int i = rocount - 1; i >= 0; i--) {
-                        statModel.removeRow(i);
-                }
-
-                Double[] fg = null;
-                HashMap<Character, Double[]> stat = mg.calSegment();
-                for (char i : stat.keySet()) {
-                        fg = stat.get(i);
-                        Object[] df = new Object[] { i, fg[0], fg[1], fg[2] };
-                        statModel.addRow(df);
-                }
-        }
+        // Double[] fg = null;
+        // HashMap<Character, Double[]> stat = md.calSegment();
+        // for (char i : stat.keySet()) {
+        // fg = stat.get(i);
+        // Object[] df = new Object[] { i, fg[0], fg[1], fg[2] };
+        // statModel.addRow(df);
+        // }
+        // }
 
         /**
          * Function to get Phase Table Data.
@@ -289,13 +270,14 @@ public class GUI {
          * @return Object[][]
          */
         public Object[][] getPhaseData() {
-                Collection<Intersection> intersection = mg.intersection;
-                Object[][] abc = intersection
-                                .stream()
-                                .map(inter -> new String[] { String.valueOf(inter.getPhases()),
-                                                String.valueOf(inter.getDuration()) })
-                                .toArray(String[][]::new);
-                return abc;
+                // Collection<Intersection> intersection = md.intersection;
+                // Object[][] abc = intersection
+                // .stream()
+                // .map(inter -> new String[] { String.valueOf(inter.getPhases()),
+                // String.valueOf(inter.getDuration()) })
+                // .toArray(String[][]::new);
+                // return abc;
+                return null;
         }
 
         /**
@@ -303,31 +285,32 @@ public class GUI {
          *
          * @return String
          */
-        public String getContent() {
-                String content = "\t\t\tROAD SIMULATION REPORT\n\t\t\t~~~~ ~~~~~~~~~~ ~~~~~~\n\nNumber of Vehicles crossed\n------ -- -------- -------\n";
+        // public String getContent() {
+        // String content = "\t\t\tROAD SIMULATION REPORT\n\t\t\t~~~~ ~~~~~~~~~~
+        // ~~~~~~\n\nNumber of Vehicles crossed\n------ -- -------- -------\n";
 
-                content += "Phase " + getPhaseData()[0][0].toString() + "\t:\t" +
-                                Integer.toString(get_veh_count(mg.vehicleEast)) + " Vehicles\n";
-                content += "Phase " + getPhaseData()[1][0].toString() + "\t:\t" +
-                                Integer.toString(get_veh_count(mg.vehicleNorth)) + " Vehicles\n";
-                content += "Phase " + getPhaseData()[2][0].toString() + "\t:\t" +
-                                Integer.toString(get_veh_count(mg.vehicleSouth)) + " Vehicles\n";
-                content += "Phase " + getPhaseData()[3][0].toString() + "\t:\t" +
-                                Integer.toString(get_veh_count(mg.vehicleWest)) + " Vehicles\n";
-                content += "Phase " + getPhaseData()[4][0].toString() + "\t:\t" +
-                                Integer.toString(get_veh_count(mg.vehicleEast)) + " Vehicles\n";
-                content += "Phase " + getPhaseData()[5][0].toString() + "\t:\t" +
-                                Integer.toString(get_veh_count(mg.vehicleNorth)) + " Vehicles\n";
-                content += "Phase " + getPhaseData()[6][0].toString() + "\t:\t" +
-                                Integer.toString(get_veh_count(mg.vehicleSouth)) + " Vehicles\n";
-                content += "Phase " + getPhaseData()[7][0].toString() + "\t:\t" +
-                                Integer.toString(get_veh_count(mg.vehicleWest)) + " Vehicles\n\n";
+        // content += "Phase " + getPhaseData()[0][0].toString() + "\t:\t" +
+        // Integer.toString(get_veh_count(md.vehicleEast)) + " Vehicles\n";
+        // content += "Phase " + getPhaseData()[1][0].toString() + "\t:\t" +
+        // Integer.toString(get_veh_count(md.vehicleNorth)) + " Vehicles\n";
+        // content += "Phase " + getPhaseData()[2][0].toString() + "\t:\t" +
+        // Integer.toString(get_veh_count(md.vehicleSouth)) + " Vehicles\n";
+        // content += "Phase " + getPhaseData()[3][0].toString() + "\t:\t" +
+        // Integer.toString(get_veh_count(md.vehicleWest)) + " Vehicles\n";
+        // content += "Phase " + getPhaseData()[4][0].toString() + "\t:\t" +
+        // Integer.toString(get_veh_count(md.vehicleEast)) + " Vehicles\n";
+        // content += "Phase " + getPhaseData()[5][0].toString() + "\t:\t" +
+        // Integer.toString(get_veh_count(md.vehicleNorth)) + " Vehicles\n";
+        // content += "Phase " + getPhaseData()[6][0].toString() + "\t:\t" +
+        // Integer.toString(get_veh_count(md.vehicleSouth)) + " Vehicles\n";
+        // content += "Phase " + getPhaseData()[7][0].toString() + "\t:\t" +
+        // Integer.toString(get_veh_count(md.vehicleWest)) + " Vehicles\n\n";
 
-                content += "Average Waiting Time to cross\t:\t" + "00:00 minutes" + "\n\n";
-                content += "Total CO2 Emmision \t\t:\t" + Double.toString(mg.calCo2());
-                return content;
+        // content += "Average Waiting Time to cross\t:\t" + "00:00 minutes" + "\n\n";
+        // content += "Total CO2 Emmision \t\t:\t" + Double.toString(md.calCo2());
+        // return content;
 
-        }
+        // }
 
         /**
          * Function to get vehicle count.
