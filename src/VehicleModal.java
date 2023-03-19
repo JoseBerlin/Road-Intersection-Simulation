@@ -18,8 +18,8 @@ public class VehicleModal extends Observable {
         vehicleWest = new LinkedList<>();
         vehicleNorth = new LinkedList<>();
         vehicleSouth = new LinkedList<>();
-        allvehicle=new HashMap<>();
-        
+        allvehicle = new HashMap<>();
+
     }
 
     // Reading vehicle csv file and adding it to stack
@@ -64,7 +64,7 @@ public class VehicleModal extends Observable {
             reader.close();
 
             getVehicleQueue();
-             Change(allvehicle);
+            Change(allvehicle);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -104,12 +104,12 @@ public class VehicleModal extends Observable {
         } else {
             throw new noSegmentException(in_s + " segment doesnt Exist. Only W, N, E, S segments exsits.");
         }
-
+        Change(allvehicle);
     }
 
     // returning all vehicles data
     public Map<Character, Queue<Vehicle>> getVehicleQueue() throws noSegmentException {
-        
+
         allvehicle.put('E', vehicleEast);
         allvehicle.put('W', vehicleWest);
         allvehicle.put('N', vehicleNorth);

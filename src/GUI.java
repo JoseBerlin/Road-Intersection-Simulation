@@ -14,7 +14,8 @@ public class GUI implements Observer {
         JFrame mainframe;
         JPanel mainpanel;
         private DefaultTableModel tableModel, statModel;
-        private JTable veh_tbl, ps_tbl, stat_tbl, add_veh_tbl;
+        private JTable veh_tbl, ps_tbl, stat_tbl;
+        JTable add_veh_tbl;
         private JButton add, exit, add_pedestrian, delete;
         Collection<Vehicle> vehicleList;
 
@@ -56,54 +57,54 @@ public class GUI implements Observer {
                 North_panel.add(veh_scroll, BorderLayout.WEST);
 
                 // 2.Phases table
-                // String[] ps_tbl_head = { "Phase", "Duration" };
+                String[] ps_tbl_head = { "Phase", "Duration" };
                 // Object[][] ps_data = getPhaseData();
-                // ps_tbl = new JTable(ps_data, ps_tbl_head);
-                // ps_tbl.getTableHeader().setReorderingAllowed(false);
-                // // ps_tbl.setAutoCreateRowSorter(true);
-                // ps_tbl.setEnabled(false);
-                // JScrollPane ps_scroll = new JScrollPane(ps_tbl);
-                // ps_scroll.setPreferredSize(new Dimension(200, 140));
-                // ps_scroll.setBorder(BorderFactory.createTitledBorder(
-                // BorderFactory.createEtchedBorder(), "Phases", TitledBorder.CENTER,
-                // TitledBorder.CENTER));
-                // North_panel.add(ps_scroll, BorderLayout.CENTER);
+                ps_tbl = new JTable();
+                ps_tbl.getTableHeader().setReorderingAllowed(false);
+                // ps_tbl.setAutoCreateRowSorter(true);
+                ps_tbl.setEnabled(false);
+                JScrollPane ps_scroll = new JScrollPane(ps_tbl);
+                ps_scroll.setPreferredSize(new Dimension(200, 140));
+                ps_scroll.setBorder(BorderFactory.createTitledBorder(
+                                BorderFactory.createEtchedBorder(), "Phases", TitledBorder.CENTER,
+                                TitledBorder.CENTER));
+                North_panel.add(ps_scroll, BorderLayout.CENTER);
 
-                // // 3.Statistics table
-                // String[] stat_tbl_head = { "Segment", "Waiting time", "Waiting Length",
-                // "Cross time" };
-                // statModel = new DefaultTableModel();
-                // statModel.setColumnIdentifiers(stat_tbl_head);
-                // stat_tbl = new JTable();
-                // stat_tbl.setModel(statModel);
+                // 3.Statistics table
+                String[] stat_tbl_head = { "Segment", "Waiting time", "Waiting Length",
+                                "Cross time" };
+                statModel = new DefaultTableModel();
+                statModel.setColumnIdentifiers(stat_tbl_head);
+                stat_tbl = new JTable();
+                stat_tbl.setModel(statModel);
 
-                // stat_tbl.getTableHeader().setReorderingAllowed(false);
-                // stat_tbl.setEnabled(false);
-                // stat_tbl.setAutoCreateRowSorter(true); // enables sorting
-                // JScrollPane stat_scroll = new JScrollPane(stat_tbl);
-                // stat_scroll.setPreferredSize(new Dimension(450, 150));
-                // stat_scroll.setBorder(BorderFactory.createTitledBorder(
-                // BorderFactory.createEtchedBorder(), "Statistics", TitledBorder.CENTER,
-                // TitledBorder.CENTER));
+                stat_tbl.getTableHeader().setReorderingAllowed(false);
+                stat_tbl.setEnabled(false);
+                stat_tbl.setAutoCreateRowSorter(true); // enables sorting
+                JScrollPane stat_scroll = new JScrollPane(stat_tbl);
+                stat_scroll.setPreferredSize(new Dimension(450, 150));
+                stat_scroll.setBorder(BorderFactory.createTitledBorder(
+                                BorderFactory.createEtchedBorder(), "Statistics", TitledBorder.CENTER,
+                                TitledBorder.CENTER));
+                statModel.addRow(stat_tbl_head);
+                // Co2 label & Text boxes
+                JLabel co2 = new JLabel("CO2 Emission : ");
+                co2.setFont(new Font("Arial", Font.BOLD, 16));
+                JLabel kg = new JLabel("kg");
+                JLabel val = new JLabel();
+                String tco2 = "fdfd";
+                val.setText(tco2);
+                JPanel co2_panel = new JPanel();
+                co2_panel.add(co2, BorderLayout.WEST);
+                co2_panel.add(val, BorderLayout.CENTER);
+                co2_panel.add(kg, BorderLayout.EAST);
 
-                // // Co2 label & Text boxes
-                // JLabel co2 = new JLabel("CO2 Emission : ");
-                // co2.setFont(new Font("Arial", Font.BOLD, 16));
-                // JLabel kg = new JLabel("kg");
-                // JLabel val = new JLabel();
-                // String tco2 = "fdfd";
-                // val.setText(tco2);
-                // JPanel co2_panel = new JPanel();
-                // co2_panel.add(co2, BorderLayout.WEST);
-                // co2_panel.add(val, BorderLayout.CENTER);
-                // co2_panel.add(kg, BorderLayout.EAST);
+                // Adding stat panel and co2 panel
+                JPanel stat_panel = new JPanel();
+                stat_panel.add(stat_scroll, BorderLayout.NORTH);
 
-                // // Adding stat panel and co2 panel
-                // JPanel stat_panel = new JPanel();
-                // stat_panel.add(stat_scroll, BorderLayout.NORTH);
-
-                // North_panel.add(stat_panel, BorderLayout.EAST);
-                // North_panel.add(co2_panel, BorderLayout.SOUTH);
+                North_panel.add(stat_panel, BorderLayout.EAST);
+                North_panel.add(co2_panel, BorderLayout.SOUTH);
 
                 // 4.Add vehicle table
                 String[] add_tbl_head = { "Type", "No.", "Segment", "Crossing_time", "Direction", "Length", "Co2" };
@@ -144,43 +145,8 @@ public class GUI implements Observer {
                 mainframe.add(North_panel, BorderLayout.NORTH);
                 mainframe.add(Centre_panel, BorderLayout.CENTER);
                 mainframe.add(South_panel, BorderLayout.SOUTH);
+
                 // Adding vehicles from gui
-                add.addActionListener(new ActionListener() {
-                        public void actionPerformed(ActionEvent e) {
-
-                                try {
-                                        String table_data_0 = GetData(add_veh_tbl, 0, 0);
-                                        String table_data_1 = GetData(add_veh_tbl, 0, 1);
-                                        String table_data_2 = GetData(add_veh_tbl, 0, 2);
-                                        String table_data_3 = GetData(add_veh_tbl, 0, 3);
-                                        String table_data_4 = GetData(add_veh_tbl, 0, 4);
-                                        String table_data_5 = GetData(add_veh_tbl, 0, 5);
-                                        String table_data_6 = GetData(add_veh_tbl, 0, 6);
-
-                                        table_data_0.getClass().equals(String.class);
-
-                                        md.add_Vehicle_gui(table_data_0, Integer.parseInt(table_data_1),
-                                                        table_data_2.charAt(0),
-                                                        Double.parseDouble(table_data_3), table_data_4.charAt(0),
-                                                        Double.parseDouble(table_data_5),
-                                                        Double.parseDouble(table_data_6));
-
-                                        Map<Character, Queue<Vehicle>> vehc = md.getVehicleQueue();
-                                        // md.loadDataFromCSV("Vehicles.csv");
-                                        update(md, vehc);
-
-                                } catch (NumberFormatException | noSegmentException e1) {
-                                        // TODO Auto-generated catch block
-                                        wrongValue(e1);
-                                }
-
-                        }
-
-                        // Function that returns data from specified position
-                        private String GetData(JTable add_veh_tbl, int i, int j) {
-                                return String.valueOf(add_veh_tbl.getModel().getValueAt(i, j));
-                        }
-                });
 
                 // Handling JFrame close Button
                 exit.addActionListener(new ActionListener() {
@@ -327,6 +293,33 @@ public class GUI implements Observer {
                         }
                 }
                 return c_veh_count;
+        }
+
+        public JButton getAddButton() {
+                return add;
+        }
+
+        public String[] getTableinfo() throws noSegmentException {
+
+                String table_data_0 = GetData(add_veh_tbl, 0, 0);
+                String table_data_1 = GetData(add_veh_tbl, 0, 1);
+                String table_data_2 = GetData(add_veh_tbl, 0, 2);
+                String table_data_3 = GetData(add_veh_tbl, 0, 3);
+                String table_data_4 = GetData(add_veh_tbl, 0, 4);
+                String table_data_5 = GetData(add_veh_tbl, 0, 5);
+                String table_data_6 = GetData(add_veh_tbl, 0, 6);
+
+                table_data_0.getClass().equals(String.class);
+
+                String[] sp = new String[] { table_data_0, table_data_1, table_data_2, table_data_3, table_data_4,
+                                table_data_5, table_data_6 };
+                return sp;
+
+        }
+
+        // Function that returns data from specified position
+        public String GetData(JTable add_veh_tbl, int i, int j) {
+                return String.valueOf(add_veh_tbl.getModel().getValueAt(i, j));
         }
 
 }

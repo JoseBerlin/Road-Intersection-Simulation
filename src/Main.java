@@ -10,7 +10,7 @@ public class Main {
         view.invoke();
         VehicleController controller = new VehicleController(model, view);
 
-        model.loadDataFromCSV("Vehicles.csv");
+        controller.loadData("Vehicles.csv");
         controller.showView();
         // Scanner Vehicles = null, Intersection = null;
 
