@@ -39,6 +39,10 @@ public class VehicleController {
         model.loadDataFromCSV(fileName);
     }
 
+    public void loadDataInter(String fileName) throws noSegmentException {
+        model.Loaddataintersection(fileName);
+    }
+
     // public void add_veh(String typ, int num, char in_s, double cross_time, char
     // direct_to, double leng,
     // double co2) throws noSegmentException {

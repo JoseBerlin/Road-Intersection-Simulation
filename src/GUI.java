@@ -187,7 +187,6 @@ public class GUI implements Observer {
         public void update(Observable obs, Object arg) {
 
                 Queue<Vehicle> upvehicle;
-                System.out.println("DSd");
 
                 if (obs instanceof VehicleModal) {
 
@@ -207,7 +206,10 @@ public class GUI implements Observer {
                                         tableModel.addRow(rowData);
                                 }
                         }
+                        
+                        
                 }
+
 
         }
 

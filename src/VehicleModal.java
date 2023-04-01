@@ -65,6 +65,7 @@ public class VehicleModal extends Observable {
 
             getVehicleQueue();
             Change(allvehicle);
+           
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -124,11 +125,11 @@ public class VehicleModal extends Observable {
     }
 
     // Reading intersection csv file and adding it to stack
-    public void intersection() {
+    public void Loaddataintersection(String filename) {
         String inter = "";
         int i = 0;
         try {
-            BufferedReader bfr = new BufferedReader(new FileReader("Intersection.csv"));
+            BufferedReader bfr = new BufferedReader(new FileReader(filename));
             while ((inter = bfr.readLine()) != null) {
                 if (i == 0) {
                     i++;
@@ -170,6 +171,7 @@ public class VehicleModal extends Observable {
         for (Vehicle vh : vehicleSouth) {
             totalCo2 += vh.getCrossing_time();
         }
+        
         return totalCo2;
     }
 
