@@ -13,7 +13,7 @@ public class Main {
         controller.loadData("Vehicles.csv");
         controller.loadDataInter("Intersection.csv");
         controller.showView();
-
+        controller.start();
 
     }
 }

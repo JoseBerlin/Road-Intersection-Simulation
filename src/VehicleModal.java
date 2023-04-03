@@ -9,6 +9,7 @@ public class VehicleModal extends Observable {
     private Queue<Vehicle> vehicleEast;
     private Queue<Vehicle> vehicleWest;
     private Queue<Vehicle> vehicleNorth;
+
     private Queue<Vehicle> vehicleSouth;
 
     Double crossingTime, waitintTime, waitingLength, totalCo2;
@@ -145,6 +146,7 @@ public class VehicleModal extends Observable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        Change(intersection);
 
         // String[][] arr = new String[intersection.size()][];
         // intersection.toArray(arr);
@@ -230,6 +232,10 @@ public class VehicleModal extends Observable {
 
         return segstat;
 
+    }
+
+    public Stack<Intersection> getIntersection() {
+        return intersection;
     }
 
 }

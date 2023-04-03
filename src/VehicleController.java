@@ -1,8 +1,9 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Observer;
+import java.util.Stack;
 
-public class VehicleController {
+public class VehicleController extends Thread{
     private VehicleModal model;
     private GUI view;
 
@@ -51,5 +52,12 @@ public class VehicleController {
 
     public void showView() {
         view.show();
+    }
+
+    public void run(){
+       Stack<Intersection> Intersection = model.getIntersection();
+       Intersection.forEach(intersection -> {
+           System.out.println(intersection.getDuration());
+       });
     }
 }

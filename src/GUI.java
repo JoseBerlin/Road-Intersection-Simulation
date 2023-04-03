@@ -13,7 +13,7 @@ import java.awt.event.ActionEvent; //handles button press events
 public class GUI implements Observer {
         JFrame mainframe;
         JPanel mainpanel;
-        private DefaultTableModel tableModel, statModel;
+        private DefaultTableModel tableModel, statModel, psModel;
         private JTable veh_tbl, ps_tbl, stat_tbl;
         JTable add_veh_tbl;
         private JButton add, exit, add_pedestrian, delete;
@@ -58,8 +58,11 @@ public class GUI implements Observer {
 
                 // 2.Phases table
                 String[] ps_tbl_head = { "Phase", "Duration" };
-                // Object[][] ps_data = getPhaseData();
+                //Object[][] ps_data = getPhaseData();
+                psModel = new DefaultTableModel();
+                psModel.setColumnIdentifiers(ps_tbl_head);
                 ps_tbl = new JTable();
+                ps_tbl.setModel(psModel);
                 ps_tbl.getTableHeader().setReorderingAllowed(false);
                 // ps_tbl.setAutoCreateRowSorter(true);
                 ps_tbl.setEnabled(false);
@@ -189,27 +192,34 @@ public class GUI implements Observer {
                 Queue<Vehicle> upvehicle;
 
                 if (obs instanceof VehicleModal) {
+                        if(arg instanceof Map) {
+                                Map<Character, Queue<Vehicle>> allvehicle = (Map<Character, Queue<Vehicle>>) arg;
+                                System.out.println(allvehicle.get("E"));
+                                tableModel.setRowCount(0);
+                                for (Map.Entry<Character, Queue<Vehicle>> veh : allvehicle.entrySet()) {
 
-                        Map<Character, Queue<Vehicle>> allvehicle = (Map<Character, Queue<Vehicle>>) arg;
-                        System.out.println(allvehicle.get("E"));
-                        tableModel.setRowCount(0);
-                        for (Map.Entry<Character, Queue<Vehicle>> veh : allvehicle.entrySet()) {
+                                        upvehicle = veh.getValue();
 
-                                upvehicle = veh.getValue();
-
-                                for (Vehicle vehicle : upvehicle) {
-                                        Object[] rowData = { vehicle.getType(), vehicle.getPlate_no(),
+                                        for (Vehicle vehicle : upvehicle) {
+                                                Object[] rowData = {vehicle.getType(), vehicle.getPlate_no(),
                                                         vehicle.getIn_segment(),
                                                         vehicle.getCrossing_time(), vehicle.getDirection_to(),
                                                         vehicle.isCrossed(),
-                                                        vehicle.getLength(), vehicle.getCo2_emission() };
-                                        tableModel.addRow(rowData);
+                                                        vehicle.getLength(), vehicle.getCo2_emission()};
+                                                tableModel.addRow(rowData);
+                                        }
                                 }
                         }
-                        
-                        
-                }
+                        if(arg instanceof Stack){
+                                Stack<Intersection> inter = (Stack<Intersection>) arg;
+                                psModel.setRowCount(0);
+                                inter.forEach(intersection -> {
+                                        Object[] rowData = {intersection.getPhases(), intersection.getDuration()};
+                                        psModel.addRow(rowData);
+                                });
+                        }
 
+                }
 
         }
 
