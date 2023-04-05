@@ -1,6 +1,9 @@
 import java.io.*;
 import java.util.*;
+import java.util.List;
 import java.util.Queue;
+import java.util.Map.Entry;
+
 import javax.swing.*; //used for user interface
 import java.awt.*;
 import javax.swing.border.TitledBorder;
@@ -18,7 +21,7 @@ public class GUI implements Observer {
         JTable add_veh_tbl;
         private JButton add, exit, add_pedestrian, delete;
         Collection<Vehicle> vehicleList;
-
+        JLabel val;
         VehicleModal mg;
         VehicleModal md = new VehicleModal();
 
@@ -58,7 +61,7 @@ public class GUI implements Observer {
 
                 // 2.Phases table
                 String[] ps_tbl_head = { "Phase", "Duration" };
-                //Object[][] ps_data = getPhaseData();
+                // Object[][] ps_data = getPhaseData();
                 psModel = new DefaultTableModel();
                 psModel.setColumnIdentifiers(ps_tbl_head);
                 ps_tbl = new JTable();
@@ -89,12 +92,11 @@ public class GUI implements Observer {
                 stat_scroll.setBorder(BorderFactory.createTitledBorder(
                                 BorderFactory.createEtchedBorder(), "Statistics", TitledBorder.CENTER,
                                 TitledBorder.CENTER));
-                statModel.addRow(stat_tbl_head);
                 // Co2 label & Text boxes
                 JLabel co2 = new JLabel("CO2 Emission : ");
                 co2.setFont(new Font("Arial", Font.BOLD, 16));
                 JLabel kg = new JLabel("kg");
-                JLabel val = new JLabel();
+                val = new JLabel();
                 String tco2 = "fdfd";
                 val.setText(tco2);
                 JPanel co2_panel = new JPanel();
@@ -190,34 +192,78 @@ public class GUI implements Observer {
         public void update(Observable obs, Object arg) {
 
                 Queue<Vehicle> upvehicle;
-
+                Double dumv;
                 if (obs instanceof VehicleModal) {
-                        if(arg instanceof Map) {
-                                Map<Character, Queue<Vehicle>> allvehicle = (Map<Character, Queue<Vehicle>>) arg;
-                                System.out.println(allvehicle.get("E"));
-                                tableModel.setRowCount(0);
-                                for (Map.Entry<Character, Queue<Vehicle>> veh : allvehicle.entrySet()) {
+                        if (arg instanceof Map) {
 
-                                        upvehicle = veh.getValue();
+                                Map<?, ?> allvehicle = (Map<?, ?>) arg;
+                                for (Object obj : allvehicle.values()) {
+                                        System.out.println(obj.getClass());
+                                }
 
-                                        for (Vehicle vehicle : upvehicle) {
-                                                Object[] rowData = {vehicle.getType(), vehicle.getPlate_no(),
-                                                        vehicle.getIn_segment(),
-                                                        vehicle.getCrossing_time(), vehicle.getDirection_to(),
-                                                        vehicle.isCrossed(),
-                                                        vehicle.getLength(), vehicle.getCo2_emission()};
-                                                tableModel.addRow(rowData);
+                                if (allvehicle.values().iterator().next() instanceof Queue<?>) {
+                                        System.out.println(allvehicle.get("E"));
+                                        tableModel.setRowCount(0);
+                                        for (Entry<?, ?> veh : allvehicle.entrySet()) {
+
+                                                upvehicle = (Queue<Vehicle>) veh.getValue();
+
+                                                for (Vehicle vehicle : upvehicle) {
+
+                                                        Object[] rowData = { vehicle.getType(), vehicle.getPlate_no(),
+                                                                        vehicle.getIn_segment(),
+                                                                        vehicle.getCrossing_time(),
+                                                                        vehicle.getDirection_to(),
+                                                                        vehicle.isCrossed(),
+                                                                        vehicle.getLength(),
+                                                                        vehicle.getCo2_emission() };
+                                                        tableModel.addRow(rowData);
+
+                                                }
+                                        }
+                                } else if (allvehicle.values().iterator().next() instanceof List<?>) {
+
+                                        statModel.setRowCount(0);
+                                        for (Entry<?, ?> stat : allvehicle.entrySet()) {
+                                                List<Double[]> sval = (List<Double[]>) stat.getValue();
+                                                Double[] dd = sval.get(0);
+
+                                                Object[] rowData = { stat.getKey(), dd[0] + " s", dd[1],
+                                                                dd[2] + " s" };
+                                                statModel.addRow(rowData);
+
                                         }
                                 }
+
                         }
-                        if(arg instanceof Stack){
-                                Stack<Intersection> inter = (Stack<Intersection>) arg;
+
+                        if (arg instanceof ArrayList) {
+                                dumv = 0.0;
+                                ArrayList<Double[]> inter = (ArrayList<Double[]>) arg;
                                 psModel.setRowCount(0);
-                                inter.forEach(intersection -> {
-                                        Object[] rowData = {intersection.getPhases(), intersection.getDuration()};
+                                for (Double[] intersection : inter) {
+                                        double dvl = intersection[1] - dumv;
+                                        Object[] rowData = { intersection[0].intValue(),
+                                                        Double.parseDouble(String.format("%.2f", dvl)) };
+                                        dumv = intersection[1];
                                         psModel.addRow(rowData);
-                                });
+                                }
                         }
+
+                        if (arg instanceof Double) {
+
+                                Double inter = (Double) arg;
+                                inter = inter / 1000;
+                                String dd = inter.toString();
+
+                                val.setText(String.format("%.2f", inter));
+                        }
+
+                        // if (arg instanceof HashMap) {
+                        // Map<Character, List<Double[]>> statval = (Map<Character, List<Double[]>>)
+                        // arg;
+
+                        // }
 
                 }
 

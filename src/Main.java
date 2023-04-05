@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) throws noSegmentException {
+    public static void main(String[] args) throws noSegmentException, InterruptedException {
 
         VehicleModal model = new VehicleModal();
         GUI view = new GUI();
@@ -14,6 +14,8 @@ public class Main {
         controller.loadDataInter("Intersection.csv");
         controller.showView();
         controller.start();
+
+        controller.threadrun();
 
     }
 }

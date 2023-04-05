@@ -9,7 +9,8 @@ public class Vehicle {
     private double length;
     private double co2_emission;
 
-    public Vehicle(){}
+    public Vehicle() {
+    }
 
     public Vehicle(String typ, int num, char in_s, double cross_time, char direct_to, boolean cross, double leng,
             double co2) {
@@ -50,6 +51,11 @@ public class Vehicle {
         return "crossed";
     }
 
+    public boolean isCrossedinB() {
+
+        return crossed;
+    }
+
     public double getLength() {
         return length;
     }
@@ -63,5 +69,6 @@ public class Vehicle {
     }
 
     public void setCrossed(boolean b) {
+        crossed = b;
     }
 }

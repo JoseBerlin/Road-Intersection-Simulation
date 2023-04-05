@@ -1,9 +1,13 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Map;
 import java.util.Observer;
+import java.util.Queue;
 import java.util.Stack;
 
-public class VehicleController extends Thread{
+import org.junit.platform.console.shadow.picocli.CommandLine.Model;
+
+public class VehicleController extends Thread {
     private VehicleModal model;
     private GUI view;
 
@@ -54,10 +58,65 @@ public class VehicleController extends Thread{
         view.show();
     }
 
-    public void run(){
-       Stack<Intersection> Intersection = model.getIntersection();
-       Intersection.forEach(intersection -> {
-           System.out.println(intersection.getDuration());
-       });
+    public void threadrun() throws noSegmentException, InterruptedException {
+        boolean newphase = false;
+        TrafficLight trafficLight = new TrafficLight("green");
+        int sigtest = 0;
+        long waiting = 0;
+        Queue<Intersection> intersection = model.getIntersection();
+        model.starttime();
+
+        while (!intersection.isEmpty()) {
+            model.randomGeneration();
+            model.randomGeneration();
+            model.randomGeneration();
+            Intersection currentsection = intersection.poll();
+            Map<Character, Queue<Vehicle>> allvehicle = model.getVehicleQueue();
+            Queue<Vehicle> tempveh = allvehicle.get(currentsection.getSegment_in());
+            System.out.println(currentsection.getSegment_in());
+            synchronized (this) {
+                for (Vehicle vc : tempveh) {
+
+                    if (!vc.isCrossedinB()) {
+                        if (sigtest % 4 == 0) {
+                            trafficLight.setState("red");
+                        }
+
+                        waiting = (long) vc.getCrossing_time() * 1000;
+                        if (trafficLight.getState().equals("red")) {
+                            waiting += 10000;
+                        }
+                        model.startThread(vc, trafficLight, currentsection, waiting, newphase);
+
+                        try {
+                            wait(waiting); // wait until the thread is finished
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        model.statcal(vc, currentsection, waiting);
+                        model.co2total(vc, currentsection, waiting);
+
+                        // while (model.tstatus) {
+                        // wait();
+                        // }
+
+                        trafficLight.setState("green");
+                        sigtest++;
+                        // vc.notifyAll();
+                    } else {
+
+                        continue;
+                    }
+
+                }
+                double elapsedTime = model.elapsedtime();
+                double fac = (double) (elapsedTime / 1000F);
+                model.addvaluePhase(
+                        currentsection.getPhases(), fac);
+                model.randomGeneration();
+                // model.randomGeneration();
+                // model.randomGeneration();
+            }
+        }
     }
 }
