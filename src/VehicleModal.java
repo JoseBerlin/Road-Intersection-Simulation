@@ -48,43 +48,45 @@ public class VehicleModal extends Observable implements Runnable {
     public void loadDataFromCSV(String filename) throws noSegmentException {
         try {
 
-            BufferedReader reader = new BufferedReader(new FileReader(filename));
-            String line = reader.readLine(); // Skip header line
-            while ((line = reader.readLine()) != null) {
-                String[] temp = line.split(",");
-                if (temp[2].charAt(0) == 'E' || temp[2].charAt(0) == 'W' || temp[2].charAt(0) == 'N'
-                        || temp[2].charAt(0) == 'S') {
-                    if (temp[4].charAt(0) == 'E' || temp[4].charAt(0) == 'W'
-                            || temp[4].charAt(0) == 'N'
-                            || temp[4].charAt(0) == 'S') {
-                        Vehicle vhi = new Vehicle(temp[0], Integer.parseInt(temp[1]), temp[2].charAt(0),
-                                Double.parseDouble(temp[3]), temp[4].charAt(0), Boolean.parseBoolean(temp[5]),
-                                Double.parseDouble(temp[6]), Double.parseDouble(temp[7]));
-                        if (temp[2].equals("E")) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+                String line = reader.readLine(); // Skip header line
+                while ((line = reader.readLine()) != null) {
+                    String[] temp = line.split(",");
+                    if (temp[2].charAt(0) == 'E' || temp[2].charAt(0) == 'W' || temp[2].charAt(0) == 'N'
+                            || temp[2].charAt(0) == 'S') {
+                        if (temp[4].charAt(0) == 'E' || temp[4].charAt(0) == 'W'
+                                || temp[4].charAt(0) == 'N'
+                                || temp[4].charAt(0) == 'S') {
+                            Vehicle vhi = new Vehicle(temp[0], Integer.parseInt(temp[1]), temp[2].charAt(0),
+                                    Double.parseDouble(temp[3]), temp[4].charAt(0), Boolean.parseBoolean(temp[5]),
+                                    Double.parseDouble(temp[6]), Double.parseDouble(temp[7]));
+                            if (temp[2].equals("E")) {
 
-                            vehicleEast.add(vhi);
-                        } else if (temp[2].equals("W")) {
+                                vehicleEast.add(vhi);
+                            } else if (temp[2].equals("W")) {
 
-                            vehicleWest.add(vhi);
-                        } else if (temp[2].equals("N")) {
+                                vehicleWest.add(vhi);
+                            } else if (temp[2].equals("N")) {
 
-                            vehicleNorth.add(vhi);
-                        } else if (temp[2].equals("S")) {
+                                vehicleNorth.add(vhi);
+                            } else if (temp[2].equals("S")) {
 
-                            vehicleSouth.add(vhi);
+                                vehicleSouth.add(vhi);
+                            }
+                        } else {
+                            throw new noSegmentException(
+                                    temp[4].charAt(0) + " segment doesnt Exist. Only W,N,E,S segments exsits.");
+
                         }
                     } else {
                         throw new noSegmentException(
-                                temp[4].charAt(0) + " segment doesnt Exist. Only W,N,E,S segments exsits.");
-
+                                temp[2].charAt(0) + " segment doesnt Exist. Only W,N,E,S segments exsits.");
                     }
-                } else {
-                    throw new noSegmentException(
-                            temp[2].charAt(0) + " segment doesnt Exist. Only W,N,E,S segments exsits.");
                 }
+                reader.close();
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
             }
-            reader.close();
-
             getVehicleQueue();
             Change(allvehicle);
 
@@ -126,7 +128,8 @@ public class VehicleModal extends Observable implements Runnable {
         } else {
             throw new noSegmentException(in_s + " segment doesnt Exist. Only W, N, E, S segments exsits.");
         }
-        // Change(allvehicle);
+        Logger.getInstance().addEntry(String.format("Vehicle %d has been added to the segment", num));
+        Change(allvehicle);
 
     }
 
@@ -167,15 +170,6 @@ public class VehicleModal extends Observable implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        // String[][] arr = new String[intersection.size()][];
-        // intersection.toArray(arr);
-        // for (int k = 0; k < arr.length; k++) {
-        // for (int j = 0; j < arr[k].length; j++) {
-        // System.out.print(arr[k][j] + " ");
-        // }
-        // System.out.println();
-        // }
     }
 
     // calculation for CO2 emmision
@@ -226,56 +220,31 @@ public class VehicleModal extends Observable implements Runnable {
     public void randomGeneration() throws noSegmentException {
 
         String[] typearray = { "Bus", "Car", "Truck" };
-        int rnd = new Random().nextInt(typearray.length);
+        // Used ThreadLocalRandom class inorder to make it thread-safe while generating
+        // Random number values
+        // rnd variable for generating random int values
+        int rnd = ThreadLocalRandom.current().nextInt(typearray.length);
         String type = typearray[rnd];
 
         int plateno = 2000000 + pl++;
         char[] segmentarray = { 'N', 'S', 'E', 'W' };
-        rnd = new Random().nextInt(segmentarray.length);
+        rnd = ThreadLocalRandom.current().nextInt(segmentarray.length);
         char seg = segmentarray[rnd];
         double crossigntime = ThreadLocalRandom.current().nextDouble(10, 25);
         crossigntime = Double.parseDouble(decon.format(crossigntime));
         while (seg == segmentarray[rnd]) {
-            rnd = new Random().nextInt(segmentarray.length);
+            rnd = ThreadLocalRandom.current().nextInt(segmentarray.length);
         }
         char segto = segmentarray[rnd];
         double waitlen = ThreadLocalRandom.current().nextDouble(10, 30);
         waitlen = Double.parseDouble(decon.format(waitlen));
         double co2eem = ThreadLocalRandom.current().nextDouble(5, 34);
         co2eem = Double.parseDouble(decon.format(co2eem));
-
+        Logger.getInstance().addEntry(String.format("New vehile %d has been generated", plateno));
         add_Vehicle_gui(type, plateno, seg, crossigntime, segto, waitlen, co2eem);
 
     }
 
-    // // crossed assignment
-    // public void setiscrossed(int platenum, char segm, char setseg) {
-    // Iterator<Vehicle> iterator;
-    // switch (segm) {
-    // case 'E':
-    // iterator = vehicleEast.iterator();
-    // while (iterator.hasNext()) {
-    // Vehicle vh = iterator.next();
-    // if (vh.getPlate_no() == platenum) {
-    // vh.setCrossed(true);
-    // }
-    // }
-    // break;
-    // case 'W':
-    // iterator = vehicleWest.iterator();
-    // while (iterator.hasNext()) {
-    // Vehicle vh = iterator.next();
-    // if (vh.getPlate_no() == platenum) {
-    // vh.setCrossed(true);
-    // // vh.setse
-    // }
-    // }
-    // break;
-    // default:
-    // break;
-    // }
-
-    // }
     // stat calculations
     public void statcal(Vehicle curveh, Intersection cursection, long waiting) {
         List<Double[]> dummy = segstat.get(cursection.getSegment_in());
@@ -285,14 +254,10 @@ public class VehicleModal extends Observable implements Runnable {
         double ct = vbv[2];
         double elp = elapsedtime();
         elp = (double) (elp / 1000F);
-        System.out.println("Crosssing previus: " + ct);
-        System.out.println("Crosssing Now: " + waiting);
-        System.out.println("Crosssing Total: " + ct + waiting);
         Double[] arrayd = { elp, wl + curveh.getLength(), ct + waiting / 1000 };
         List<Double[]> statdum = new ArrayList<>();
         statdum.add(arrayd);
         statdum.set(0, arrayd);
-        System.out.println("edsdsdsds: " + arrayd[2]);
         segstat.put(cursection.getSegment_in(), statdum);
         Change(segstat);
     }
@@ -333,7 +298,6 @@ public class VehicleModal extends Observable implements Runnable {
 
                         if (trafficLight.getState().equals("green")) {
 
-                            System.out.println("Vehicle " + curveh.getPlate_no() + " is moving");
                             try {
                                 wait(waiting); // wait until the thread is finished
                             } catch (InterruptedException e) {
@@ -341,7 +305,6 @@ public class VehicleModal extends Observable implements Runnable {
                             }
 
                         } else {
-                            System.out.println("Vehicle " + curveh.getPlate_no() + " is waiting at the traffic light");
                             try {
                                 wait(waiting); // wait until the thread is finished
                             } catch (InterruptedException e) {
@@ -354,6 +317,8 @@ public class VehicleModal extends Observable implements Runnable {
                         double elp = (double) (elapsedTime / 1000F);
 
                         curveh.setCrossed(true);
+                        Logger.getInstance().addEntry(
+                                String.format("Vehicle %d has crossed the intersection", curveh.getPlate_no()));
                         Change(allvehicle);
 
                     }
@@ -365,56 +330,6 @@ public class VehicleModal extends Observable implements Runnable {
         myThread.start();
 
     }
-
-    // calcuations for segment table
-    // public HashMap<Character, Double[]> calSegment() {
-    // HashMap<Character, Double[]> segstat = new HashMap<Character, Double[]>();
-    // segNill();
-    // for (Vehicle vh : vehicleEast) {
-    // crossingTime += vh.getCrossing_time();
-    // waitingLength += vh.getLength();
-    // waitintTime += vh.getCo2_emission();
-
-    // }
-    // Double[] ddb = new Double[] { crossingTime, waitingLength, waitintTime };
-    // segstat.put('E', ddb);
-
-    // segNill();
-
-    // for (Vehicle vh : vehicleWest) {
-    // crossingTime += vh.getCrossing_time();
-    // waitingLength += vh.getLength();
-    // waitintTime += vh.getCo2_emission();
-
-    // }
-    // ddb = new Double[] { crossingTime, waitingLength, waitintTime };
-    // segstat.put('W', ddb);
-
-    // segNill();
-
-    // for (Vehicle vh : vehicleNorth) {
-    // crossingTime += vh.getCrossing_time();
-    // waitingLength += vh.getLength();
-    // waitintTime += vh.getCo2_emission();
-
-    // }
-    // ddb = new Double[] { crossingTime, waitingLength, waitintTime };
-    // segstat.put('N', ddb);
-
-    // segNill();
-
-    // for (Vehicle vh : vehicleSouth) {
-    // crossingTime += vh.getCrossing_time();
-    // waitingLength += vh.getLength();
-    // waitintTime += vh.getCo2_emission();
-
-    // }
-    // ddb = new Double[] { crossingTime, waitingLength, waitintTime };
-    // segstat.put('S', ddb);
-
-    // return segstat;
-
-    // }
 
     public Queue<Intersection> getIntersection() {
         return intersection;

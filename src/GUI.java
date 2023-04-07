@@ -9,6 +9,7 @@ import java.awt.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
 
 import java.awt.event.ActionListener; //listens for mouse clicks on buttons
 import java.awt.event.ActionEvent; //handles button press events
@@ -22,8 +23,6 @@ public class GUI implements Observer {
         private JButton add, exit, add_pedestrian, delete;
         Collection<Vehicle> vehicleList;
         JLabel val;
-        VehicleModal mg;
-        VehicleModal md = new VehicleModal();
 
         public void invoke() {
 
@@ -61,13 +60,11 @@ public class GUI implements Observer {
 
                 // 2.Phases table
                 String[] ps_tbl_head = { "Phase", "Duration" };
-                // Object[][] ps_data = getPhaseData();
                 psModel = new DefaultTableModel();
                 psModel.setColumnIdentifiers(ps_tbl_head);
                 ps_tbl = new JTable();
                 ps_tbl.setModel(psModel);
                 ps_tbl.getTableHeader().setReorderingAllowed(false);
-                // ps_tbl.setAutoCreateRowSorter(true);
                 ps_tbl.setEnabled(false);
                 JScrollPane ps_scroll = new JScrollPane(ps_tbl);
                 ps_scroll.setPreferredSize(new Dimension(200, 140));
@@ -92,12 +89,13 @@ public class GUI implements Observer {
                 stat_scroll.setBorder(BorderFactory.createTitledBorder(
                                 BorderFactory.createEtchedBorder(), "Statistics", TitledBorder.CENTER,
                                 TitledBorder.CENTER));
+
                 // Co2 label & Text boxes
                 JLabel co2 = new JLabel("CO2 Emission : ");
                 co2.setFont(new Font("Arial", Font.BOLD, 16));
                 JLabel kg = new JLabel("kg");
                 val = new JLabel();
-                String tco2 = "fdfd";
+                String tco2 = "0";
                 val.setText(tco2);
                 JPanel co2_panel = new JPanel();
                 co2_panel.add(co2, BorderLayout.WEST);
@@ -114,7 +112,7 @@ public class GUI implements Observer {
                 // 4.Add vehicle table
                 String[] add_tbl_head = { "Type", "No.", "Segment", "Crossing_time", "Direction", "Length", "Co2" };
                 Object[][] add_data = { { "car", "23232", "E", "32.9", "N", "12.0", "32.0" } };
-                JComboBox optbox = new JComboBox<>();
+                JComboBox<String> optbox = new JComboBox<String>();
                 optbox.addItem("car");
                 optbox.addItem("bike");
                 optbox.addItem("bus");
@@ -164,8 +162,12 @@ public class GUI implements Observer {
                                 if (confriming == JOptionPane.YES_OPTION) {
 
                                         try {
+                                                Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                                                        Logger.getInstance().writeLogsToFile("log.txt");
+                                                }));
                                                 FileWriter writer = new FileWriter("report.txt");
-                                                // writer.write(getContent());
+                                                writer.write(getContent(veh_tbl.getModel(), ps_tbl.getModel(),
+                                                                stat_tbl.getModel(), val.getText()));
                                                 writer.close();
                                                 JOptionPane.showMessageDialog(null,
                                                                 "The simulation report has been generated",
@@ -197,12 +199,8 @@ public class GUI implements Observer {
                         if (arg instanceof Map) {
 
                                 Map<?, ?> allvehicle = (Map<?, ?>) arg;
-                                for (Object obj : allvehicle.values()) {
-                                        System.out.println(obj.getClass());
-                                }
 
                                 if (allvehicle.values().iterator().next() instanceof Queue<?>) {
-                                        System.out.println(allvehicle.get("E"));
                                         tableModel.setRowCount(0);
                                         for (Entry<?, ?> veh : allvehicle.entrySet()) {
 
@@ -259,12 +257,6 @@ public class GUI implements Observer {
                                 val.setText(String.format("%.2f", inter));
                         }
 
-                        // if (arg instanceof HashMap) {
-                        // Map<Character, List<Double[]>> statval = (Map<Character, List<Double[]>>)
-                        // arg;
-
-                        // }
-
                 }
 
         }
@@ -274,83 +266,81 @@ public class GUI implements Observer {
         }
 
         /**
-         * Function to assign stat data in table.
-         */
-        // public void setStatData() {
-        // int rocount = statModel.getRowCount();
-
-        // Double[] fg = null;
-        // HashMap<Character, Double[]> stat = md.calSegment();
-        // for (char i : stat.keySet()) {
-        // fg = stat.get(i);
-        // Object[] df = new Object[] { i, fg[0], fg[1], fg[2] };
-        // statModel.addRow(df);
-        // }
-        // }
-
-        /**
-         * Function to get Phase Table Data.
-         *
-         * @return Object[][]
-         */
-        public Object[][] getPhaseData() {
-                // Collection<Intersection> intersection = md.intersection;
-                // Object[][] abc = intersection
-                // .stream()
-                // .map(inter -> new String[] { String.valueOf(inter.getPhases()),
-                // String.valueOf(inter.getDuration()) })
-                // .toArray(String[][]::new);
-                // return abc;
-                return null;
-        }
-
-        /**
          * Function to get Content for the Report.
-         *
+         * 
+         * @param vehicles
+         * @param phases
+         * @param statistics
+         * @param co2
          * @return String
          */
-        // public String getContent() {
-        // String content = "\t\t\tROAD SIMULATION REPORT\n\t\t\t~~~~ ~~~~~~~~~~
-        // ~~~~~~\n\nNumber of Vehicles crossed\n------ -- -------- -------\n";
+        public String getContent(TableModel vehicles, TableModel phases, TableModel statistics, String co2) {
+                String content = "\t\t\tROAD SIMULATION REPORT\n\t\t\t~~~~ ~~~~~~~~~~ ~~~~~~\n\n";
 
-        // content += "Phase " + getPhaseData()[0][0].toString() + "\t:\t" +
-        // Integer.toString(get_veh_count(md.vehicleEast)) + " Vehicles\n";
-        // content += "Phase " + getPhaseData()[1][0].toString() + "\t:\t" +
-        // Integer.toString(get_veh_count(md.vehicleNorth)) + " Vehicles\n";
-        // content += "Phase " + getPhaseData()[2][0].toString() + "\t:\t" +
-        // Integer.toString(get_veh_count(md.vehicleSouth)) + " Vehicles\n";
-        // content += "Phase " + getPhaseData()[3][0].toString() + "\t:\t" +
-        // Integer.toString(get_veh_count(md.vehicleWest)) + " Vehicles\n";
-        // content += "Phase " + getPhaseData()[4][0].toString() + "\t:\t" +
-        // Integer.toString(get_veh_count(md.vehicleEast)) + " Vehicles\n";
-        // content += "Phase " + getPhaseData()[5][0].toString() + "\t:\t" +
-        // Integer.toString(get_veh_count(md.vehicleNorth)) + " Vehicles\n";
-        // content += "Phase " + getPhaseData()[6][0].toString() + "\t:\t" +
-        // Integer.toString(get_veh_count(md.vehicleSouth)) + " Vehicles\n";
-        // content += "Phase " + getPhaseData()[7][0].toString() + "\t:\t" +
-        // Integer.toString(get_veh_count(md.vehicleWest)) + " Vehicles\n\n";
+                content += "Number of Vehicles Crossed during Simulation" + "\t:\t" +
+                                get_veh_count(vehicles) + " Vehicles\n\n";
+                content += "\t\t\tStatistics of each Segment\n\t\t\t---------- -- ---- -------\n";
+                content += String.format("\n%s\n", getstat(statistics));
 
-        // content += "Average Waiting Time to cross\t:\t" + "00:00 minutes" + "\n\n";
-        // content += "Total CO2 Emmision \t\t:\t" + Double.toString(md.calCo2());
-        // return content;
+                content += String.format("Average Waiting Time to cross\t:\t%s Seconds\n\n", getavg_wait(statistics));
+                content += String.format("Total CO2 Emmision during the simulation \t\t:\t%s KG\n", co2.toString());
+                return content;
 
-        // }
+        }
 
         /**
          * Function to get vehicle count.
          * 
-         * @param myQueue
-         * @return int
+         * @param mytbl
+         * @return String
          */
-        public int get_veh_count(Queue<Vehicle> myQueue) {
+        public String get_veh_count(TableModel mytbl) {
                 int c_veh_count = 0; // Crossed vehicle count
-                for (Vehicle vh : myQueue) {
-                        if (vh.isCrossed().equals(true)) // Checking whether the vehicle has been crossed
+                for (int i = 0; i < mytbl.getRowCount(); i++) {
+                        if (mytbl.getValueAt(i, 5).toString().equals("crossed")) // Checking whether the vehicle has
+                                                                                 // been crossed
                         {
                                 c_veh_count += 1;
                         }
                 }
-                return c_veh_count;
+                return Integer.toString(c_veh_count);
+        }
+
+        private String getstat(TableModel statistics) {
+                String Content = "Segment\t\t" + "Total Waiting Time\t"
+                                + "Total Waiting length(vehicles)\t"
+                                + "Total Crosstime";
+                Content += "\n*******\t\t" + "******************\t"
+                                + "******************************\t"
+                                + "***************";
+                String seg = null;
+                if (statistics.getRowCount() > 0) {
+                        for (int i = 0; i < statistics.getRowCount(); i++) {
+                                if (statistics.getValueAt(i, 0).equals('S'))
+                                        seg = "South";
+                                else if (statistics.getValueAt(i, 0).equals('E'))
+                                        seg = "East";
+                                else if (statistics.getValueAt(i, 0).equals('N'))
+                                        seg = "North";
+                                else if (statistics.getValueAt(i, 0).equals('W'))
+                                        seg = "West";
+                                Content += String.format("\n%-7s %18s %20s %24s\n", seg,
+                                                statistics.getValueAt(i, 1).toString(),
+                                                statistics.getValueAt(i, 2).toString(),
+                                                statistics.getValueAt(i, 3).toString());
+                        }
+                } else
+                        Content = "\tSimulation did not run long enough to produce statistics\n";
+                return Content;
+        }
+
+        private Object getavg_wait(TableModel statistics) {
+                double val = 0.0;
+                for (int i = 0; i < statistics.getRowCount(); i++) {
+                        val += Double.parseDouble(statistics.getValueAt(i, 1).toString().split(" ")[0]);
+                }
+                val = val / statistics.getRowCount();
+                return val;
         }
 
         public JButton getAddButton() {

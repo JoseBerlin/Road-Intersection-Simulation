@@ -1,11 +1,7 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
-import java.util.Observer;
 import java.util.Queue;
-import java.util.Stack;
-
-import org.junit.platform.console.shadow.picocli.CommandLine.Model;
 
 public class VehicleController extends Thread {
     private VehicleModal model;
@@ -16,7 +12,6 @@ public class VehicleController extends Thread {
         this.view = view;
 
         // Register the view as an observer of the model
-
         model.addObserver(view);
 
         view.getAddButton().addActionListener(new ActionListener() {
@@ -48,18 +43,14 @@ public class VehicleController extends Thread {
         model.Loaddataintersection(fileName);
     }
 
-    // public void add_veh(String typ, int num, char in_s, double cross_time, char
-    // direct_to, double leng,
-    // double co2) throws noSegmentException {
-    // model.add_Vehicle_gui(typ, num, in_s, cross_time, direct_to, leng, co2);
-    // }
-
     public void showView() {
         view.show();
     }
 
     public void threadrun() throws noSegmentException, InterruptedException {
         boolean newphase = false;
+        Logger.getInstance().addEntry("\tSimulation Started");
+        // Initial state of traffic light is set to GREEN
         TrafficLight trafficLight = new TrafficLight("green");
         int sigtest = 0;
         long waiting = 0;
@@ -73,7 +64,6 @@ public class VehicleController extends Thread {
             Intersection currentsection = intersection.poll();
             Map<Character, Queue<Vehicle>> allvehicle = model.getVehicleQueue();
             Queue<Vehicle> tempveh = allvehicle.get(currentsection.getSegment_in());
-            System.out.println(currentsection.getSegment_in());
             synchronized (this) {
                 for (Vehicle vc : tempveh) {
 
@@ -96,13 +86,8 @@ public class VehicleController extends Thread {
                         model.statcal(vc, currentsection, waiting);
                         model.co2total(vc, currentsection, waiting);
 
-                        // while (model.tstatus) {
-                        // wait();
-                        // }
-
                         trafficLight.setState("green");
                         sigtest++;
-                        // vc.notifyAll();
                     } else {
 
                         continue;
@@ -114,8 +99,6 @@ public class VehicleController extends Thread {
                 model.addvaluePhase(
                         currentsection.getPhases(), fac);
                 model.randomGeneration();
-                // model.randomGeneration();
-                // model.randomGeneration();
             }
         }
     }
