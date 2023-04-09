@@ -6,6 +6,7 @@ import java.util.Queue;
 public class VehicleController extends Thread {
     private VehicleModal model;
     private GUI view;
+    TrafficLight trafficLight;
 
     public VehicleController(VehicleModal model, GUI view) {
         this.model = model;
@@ -33,6 +34,25 @@ public class VehicleController extends Thread {
             }
         });
 
+        view.getPedestrian().addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                if (trafficLight.getState().equals("green")) {
+                    trafficLight.setState("red");
+                    Logger.getInstance().addEntry("Pedestrians are crossing the road");
+                } else {
+                    try {
+                        throw new noPedestrianException("The traffic light is already red");
+                    } catch (noPedestrianException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        });
+
     }
 
     public void loadData(String fileName) throws noSegmentException {
@@ -51,13 +71,13 @@ public class VehicleController extends Thread {
         boolean newphase = false;
         Logger.getInstance().addEntry("\tSimulation Started");
         // Initial state of traffic light is set to GREEN
-        TrafficLight trafficLight = new TrafficLight("green");
+        trafficLight = new TrafficLight("green");
         int sigtest = 0;
         long waiting = 0;
         Queue<Intersection> intersection = model.getIntersection();
         model.starttime();
 
-        while (!intersection.isEmpty()) {
+        while (true) {
             model.randomGeneration();
             model.randomGeneration();
             model.randomGeneration();
@@ -76,6 +96,9 @@ public class VehicleController extends Thread {
                         if (trafficLight.getState().equals("red")) {
                             waiting += 10000;
                         }
+                        if (trafficLight.getState().equals("red")) {
+                            trafficLight.setState("green");
+                        }
                         model.startThread(vc, trafficLight, currentsection, waiting, newphase);
 
                         try {
@@ -86,7 +109,6 @@ public class VehicleController extends Thread {
                         model.statcal(vc, currentsection, waiting);
                         model.co2total(vc, currentsection, waiting);
 
-                        trafficLight.setState("green");
                         sigtest++;
                     } else {
 
@@ -99,7 +121,14 @@ public class VehicleController extends Thread {
                 model.addvaluePhase(
                         currentsection.getPhases(), fac);
                 model.randomGeneration();
+
+                if (intersection.isEmpty()) {
+                    model.Loaddataintersection("Intersection.csv");
+                    intersection = model.getIntersection();
+                }
+
             }
+
         }
     }
 }

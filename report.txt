@@ -1,14 +1,14 @@
 			ROAD SIMULATION REPORT
 			~~~~ ~~~~~~~~~~ ~~~~~~
 
-Number of Vehicles Crossed during Simulation	:	3 Vehicles
+Number of Vehicles Crossed during Simulation	:	4 Vehicles
 
 			Statistics of each Segment
 			---------- -- ---- -------
 
 Segment		Total Waiting Time	Total Waiting length(vehicles)	Total Crosstime
 *******		******************	******************************	***************
-South             34.065 s                47.19                   34.0 s
+South             74.103 s    96.20000000000002                   74.0 s
 
 East                 0.0 s                  0.0                    0.0 s
 
@@ -16,6 +16,6 @@ West                 0.0 s                  0.0                    0.0 s
 
 North                0.0 s                  0.0                    0.0 s
 
-Average Waiting Time to cross	:	8.51625 Seconds
+Average Waiting Time to cross	:	18.52575 Seconds
 
-Total CO2 Emmision during the simulation 		:	0.26 KG
+Total CO2 Emmision during the simulation 		:	0.74 KG

@@ -347,6 +347,10 @@ public class GUI implements Observer {
                 return add;
         }
 
+        public JButton getPedestrian(){
+                return add_pedestrian;
+        }
+
         public String[] getTableinfo() throws noSegmentException {
 
                 String table_data_0 = GetData(add_veh_tbl, 0, 0);

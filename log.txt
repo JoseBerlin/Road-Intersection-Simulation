@@ -9,13 +9,13 @@ Vehicle 2000001 has been added to the segment
 New vehile 2000002 has been generated
 Vehicle 2000002 has been added to the segment
 Traffic Light Signal has changed to RED
+Traffic Light Signal has changed to GREEN
 Vehicle 1000003 has crossed the intersection
-Traffic Light Signal has changed to GREEN
 Vehicle 1000007 has crossed the intersection
+Traffic Light Signal has changed to RED
+Pedestrians are crossing the road
 Traffic Light Signal has changed to GREEN
-Traffic Light Signal has changed to GREEN
-Vehicle 2000000 has crossed the intersection
-Traffic Light Signal has changed to GREEN
+Vehicle 2000002 has crossed the intersection
 New vehile 2000003 has been generated
 Vehicle 2000003 has been added to the segment
 New vehile 2000004 has been generated
@@ -25,4 +25,24 @@ Vehicle 2000005 has been added to the segment
 New vehile 2000006 has been generated
 Vehicle 2000006 has been added to the segment
 Traffic Light Signal has changed to RED
+Traffic Light Signal has changed to GREEN
+New vehile 2000007 has been generated
+Vehicle 2000007 has been added to the segment
+New vehile 2000008 has been generated
+Vehicle 2000008 has been added to the segment
+New vehile 2000009 has been generated
+Vehicle 2000009 has been added to the segment
+New vehile 2000010 has been generated
+Vehicle 2000010 has been added to the segment
+Vehicle 2000008 has crossed the intersection
+New vehile 2000011 has been generated
+Vehicle 2000011 has been added to the segment
+New vehile 2000012 has been generated
+Vehicle 2000012 has been added to the segment
+New vehile 2000013 has been generated
+Vehicle 2000013 has been added to the segment
+New vehile 2000014 has been generated
+Vehicle 2000014 has been added to the segment
+Traffic Light Signal has changed to RED
+Traffic Light Signal has changed to GREEN
 	Simulation has been ended
